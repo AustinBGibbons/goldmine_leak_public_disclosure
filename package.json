@@ -1,6 +1,9 @@
 {
   "name": "boilerplate",
   "version": "1.0.0",
+  "engines": {
+    "node": "8.11.3"
+  },
   "description": "Plaid Boilerplate app",
   "main": "index.js",
   "repository": "git@github.plaid.com:plaid/boilerplate.git",

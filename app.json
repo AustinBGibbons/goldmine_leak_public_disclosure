@@ -1,0 +1,7 @@
+{
+  "name": "Plaid Starter App",
+  "description": "Boilerplate Plaid App using Node.js",
+  "repository": "https://github.plaid.com/echu/boilerplate",
+  "logo": "https://my-plaid-app.herokuapp.com/plaid.png",
+  "keywords": ["node", "express", "plaid"]
+}
