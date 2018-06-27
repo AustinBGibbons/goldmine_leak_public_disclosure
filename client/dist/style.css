@@ -1,0 +1,10 @@
+body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+}
+
+/* Header */ 
+.navbar-brand {
+  margin-left: 20px;
+  margin-top: 10px;
+}
