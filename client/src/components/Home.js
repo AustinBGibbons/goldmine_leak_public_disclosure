@@ -24,11 +24,7 @@ class Home extends Component {
 
   initializeBankAccount() {
     this.setState({
-<<<<<<< HEAD
-      bankConnected: true,
-=======
       appState: AppState.ITEM_LINKED,
->>>>>>> f609d8b1a184c8c348526ae70b40c2297f197fd5
     });
 
     // Start polling for transactions. We do this because the server is currently
@@ -47,15 +43,7 @@ class Home extends Component {
     });
 
     const transactions = res.data.transactions;
-<<<<<<< HEAD
     if (transactions.length > 0) {
-=======
-
-    // Check if our app server has received transactions for the linked item.
-    // It usually takes 30-240 seconds for the first transaction pull to complete
-    // https://plaid.com/docs/quickstart/#pulling-transaction-data
-    if (transactions) {
->>>>>>> f609d8b1a184c8c348526ae70b40c2297f197fd5
       console.log("fetchTransactions end poll");
       clearInterval(this.fetchTransactionsInterval);
 
@@ -97,6 +85,7 @@ class Home extends Component {
       case AppState.INIT:
         return (
           <div>
+            <br/>
             <p className="welcome-msg">
               Welcome to the Plaid Boilerplate Tutorial!
             </p>
@@ -106,19 +95,31 @@ class Home extends Component {
       case AppState.ITEM_LINKED:
         return (
           <div>
-            <p>Item Linked! Calling app server to exchange public_token for access_token...</p>
+            <br/>
+            <p>
+              <strong style={{color:'gold'}}>Status: </strong> 
+              Item Linked! Calling app server to exchange public_token for access_token...
+            </p>
           </div>
         );
       case AppState.PUBLIC_TOKEN_EXCHANGED:
         return (
           <div>
-            <p>Server has access_token! App server is waiting for transactions from Plaid...</p>
+            <br/>
+            <p>
+              <strong style={{color:'gold'}}>Status: </strong> 
+              Server has access_token! App server is waiting for transactions from Plaid...
+            </p>
           </div>
         );
       case AppState.TRANSACTIONS_RECEIVED:
         return (
           <div>
-            <p>Received transactions! See below</p>
+            <br/>
+            <p>
+              <strong style={{color:'green'}}>Status: </strong>
+              Received transactions! See below.
+            </p>
             <TransactionList transactions={this.state.transactions}/>
           </div>
         )
@@ -128,31 +129,9 @@ class Home extends Component {
     return(
       <div>
         <Header/>
-<<<<<<< HEAD
-        <p className="welcome-msg">
-          Welcome to the Plaid Boilerplate Tutorial!
-        </p>
-        {this.state.bankConnected ? (
-          this.state.transactions && this.state.transactions.length > 0 ? (
-            <div>
-              <p>Bank Connected! See your transactions below.</p>
-              <TransactionList transactions={this.state.transactions}/>
-            </div>
-          ) : (
-            <div>
-              <p>Bank Connected! Loading transactions...</p>
-            </div>
-          )
-        ) : (
-          <Link
-            initializeBankAccount={this.initializeBankAccount}
-          />
-        )}
-=======
         <div className="container">
           {this.renderAppState(this.state.appState)}
         </div>
->>>>>>> f609d8b1a184c8c348526ae70b40c2297f197fd5
       </div>
     );
   };

@@ -50,7 +50,7 @@ class Link extends Component {
         clientName="Boilerplate"
         env="sandbox"
         institution={null}
-        publicKey="2ca704caf9cd7b6d54fd1b1d6dfcd2"
+        publicKey="c53a213ab2d73e2c0376babf83bd3b"
         product={['transactions']}
         apiVersion='v2'
         webhook="http://1f5643ee.ngrok.io/webhook"

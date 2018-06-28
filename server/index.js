@@ -32,7 +32,7 @@ const initPlaidClient = () => {
   const PLAID_SECRET = process.env.PLAID_SECRET;
   const PLAID_PUBLIC_KEY = process.env.PLAID_PUBLIC_KEY;
   const PLAID_ENV = process.env.PLAID_ENV || 'sandbox';
-
+  
   const plaidClient = new plaid.Client(
     PLAID_CLIENT_ID,
     PLAID_SECRET,
@@ -56,7 +56,6 @@ app.post('/get_item_linked_state', async (req, res) => {
   })
 });
 
-
 /**
  * Endpoint for fetching transactions for a user from our
  * mongo database.
@@ -70,9 +69,10 @@ app.post('/get_transactions', async (req, res) => {
 });
 
 /**
- * Endpoint for webhook notifications.
- * You can then perform actions accordingly. This app example
- * only handles TRANSACTIONS updates. 
+ * Endpoint for receiving webhook requests from Plaid.
+ * You can then perform actions accordingly. This app 
+ * only handles TRANSACTIONS update webhooks, but the
+ * concept is similar for other types of webhook requests. 
  */
 app.post('/webhook', async (req, res) => {
   const { item_id } = req.body;
@@ -86,7 +86,7 @@ app.post('/webhook', async (req, res) => {
   let start_date;
 
   // The following are recommended date ranges when pulling 
-  // transactions data for certain updates.
+  // transactions data for each update type.
   if (webhook_code === 'INITIAL_UPDATE') {
     start_date = now.subtract(30, 'days').format('YYYY-MM-DD');
   } else if (webhook_code === 'HISTORICAL_UPDATE') {
@@ -125,7 +125,6 @@ app.post('/exchange_token', async (req, res) => {
         return res.json({error: msg});
       }
 
-<<<<<<< HEAD
       const { access_token } = tokenResponse;
       const { item_id } = tokenResponse;
       console.log('Access Token:' , access_token);
@@ -139,37 +138,6 @@ app.post('/exchange_token', async (req, res) => {
       await create_user(user);
       
       res.send({'error': false});
-=======
-      const ACCESS_TOKEN = tokenResponse.access_token;
-      const ITEM_ID = tokenResponse.item_id;
-      console.log('Access Token:' , ACCESS_TOKEN);
-      console.log('Item ID:', ITEM_ID);
-
-      // We make a /transactions/get call to the Plaid API, but we'll
-      // sometimes get hit with a PRODUCT_NOT_READY error
-      const now = moment();
-      const end_date = now.format('YYYY-MM-DD');
-      const start_date = now.subtract(30, 'days').format('YYYY-MM-DD');
-
-      plaidClient.getTransactions(
-        ACCESS_TOKEN,
-        start_date,
-        end_date,
-      ).then( async (response) => {
-        const TRANSACTIONS = response.transactions;
-        const user = {
-          ACCESS_TOKEN,
-          ITEM_ID,
-          TRANSACTIONS,
-        }
-        await create_user(user);
-
-        // We'll return transactions if we retrieve them successfully
-        res.send({TRANSACTIONS});
-      }).catch( (error) => {
-        console.log(error);
-      });
->>>>>>> f609d8b1a184c8c348526ae70b40c2297f197fd5
 
   });
 });

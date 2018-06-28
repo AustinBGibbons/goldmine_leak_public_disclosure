@@ -4,7 +4,6 @@ mongoose.connect('mongodb://localhost/boilerplate');
 
 const db = mongoose.connection;
 
-// This is the User schema in our Mongo database.
 const userSchema = mongoose.Schema({
   user_id: Number,
   access_token: String,
@@ -14,13 +13,9 @@ const userSchema = mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-const is_item_linked = () => {
-  return User.find({'user_id': 1}).count();
-}
-
 const create_user = async user => {
-  // TODO: make sure we don't insert a user_id multiple times
-  if (await is_bank_connected() > 0) {
+
+  if (await is_item_linked() > 0) {
     return;
   }
 
@@ -40,22 +35,34 @@ const create_user = async user => {
 }
 
 /**
+ * For the purposes of this app, we don't want to have more 
+ * than one end user. This function checks whether a user
+ * has already been created or not.
+ */
+const is_item_linked = () => {
+  return User.find({'user_id': 1}).count();
+}
+
+/**
  * Retrieves a user's access_token given their item_id
- * 
- * @param {String} item_id 
+ * @param {String} item_id Item's item id
  */
 const retrieve_access_token = (item_id) => {
   return User.find({'item_id' : item_id});
 }
 
+/**
+ * For the purposes of this app, our database only has 1 user.
+ * This function simply grabs that one user's information.
+ */
 const retrieve_transactions = () => {
   return User.find({'user_id': 1});
 }
 
 /**
  * Updates transactions in our database as needed for users
- *
- * @param {Array} transactions
+ * @param {String} ACCESS_TOKEN Item's access token
+ * @param {Array} transactions  Item's transactions
  */
 const save_transactions = async (ACCESS_TOKEN, transactions) => {
   const query = { access_token: ACCESS_TOKEN };

@@ -10,16 +10,19 @@ class Header extends Component {
     return (
       <div>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <div>
-            <p className="navbar-brand" href="#">
-              Boilerplate App 💸⏱
-            </p>
-            <a className="dashboard-link"
-               href="https://dashboard.plaid.com/account/keys"
-               target="_blank">
-              Click here to get your API Keys
-            </a>
-          </div>
+          <ul>
+            <li>
+              <a href="/" className="navbar-brand">
+                Boilerplate App 💸⏱
+              </a>
+            </li>
+            <li className="dashboard-link">
+              <a href="https://dashboard.plaid.com/account/keys"
+                target="_blank">
+                Click here to get your API Keys
+              </a>
+            </li>
+          </ul>
         </nav>
       </div>
     );
