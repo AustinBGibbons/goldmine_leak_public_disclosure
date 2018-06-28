@@ -26,11 +26,12 @@ class Link extends Component {
   }
 
   async handleOnEvent(eventName, metadata) {
-
+    console.log(eventName, metadata);
   }
 
   async handleOnExit(error, metadata) {
-
+    console.log('link: user exited');
+    console.log(error, metadata);
   }
 
   async handleOnLoad() {

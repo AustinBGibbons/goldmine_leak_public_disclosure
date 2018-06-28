@@ -32,13 +32,24 @@ const create_user = async user => {
 }
 
 const retrieve_transactions = async (user_id) => {
-
+  
 
 }
 
-const delete_user = async access_token => {
+/**
+ * Updates transactions in our database as needed for users
+ * 
+ * @param {Array} transactions 
+ */
+const save_transactions = async (ACCESS_TOKEN, transactions) => {
+  const query = { access_token: ACCESS_TOKEN };
+  const update = {$set:{transactions: transactions}}
+  return User.findOneAndUpdate(query, update);
+}
+
+const delete_user = async user_id => {
   return User
-    .findOne({'access_token': access_token})
+    .findOne({'user_id': user_id})
     .remove()
     .exec();
 }
@@ -46,5 +57,6 @@ const delete_user = async access_token => {
 module.exports = {
   create_user,
   retrieve_transactions,
-  delete_user
+  save_transactions,
+  delete_user,
 }

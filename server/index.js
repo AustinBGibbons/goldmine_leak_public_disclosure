@@ -42,12 +42,9 @@ const initPlaidClient = () => {
 const plaidClient = initPlaidClient();
 
 /**
- * 
- */
-
-
-/**
- * Endpoint for webhook notifications
+ * Endpoint for webhook notifications.
+ * You can then perform actions accordingly (i.e fetching 
+ * fresh transactions data from Plaid's servers).
  */
 app.post('/webhook', (req, res) => {
 
@@ -57,9 +54,7 @@ app.post('/webhook', (req, res) => {
 /**
  * Endpoint for the exchange token process
  */
-app.post('/exchange_token', (req, res) => {
-
-  console.log("metadata is ", req.body.metadata)
+app.post('/exchange_token', async (req, res) => {
 
   const PUBLIC_TOKEN = req.body.public_token;
 
@@ -80,6 +75,7 @@ app.post('/exchange_token', (req, res) => {
       const user = {
         ACCESS_TOKEN,
         ITEM_ID,
+
       }
 
       await create_user(user);
@@ -88,6 +84,14 @@ app.post('/exchange_token', (req, res) => {
   });
 });
 
+/**
+ * Endpoint for deleting users from the database
+ */
+app.post('/delete_user', async (req, res) => {
+  const { user_id } = req.body;
+  await delete_user(user_id);
+  res.send({'error': false});
+});
 
 app.listen(port, () => {
   console.log("Listening on port ", port);
