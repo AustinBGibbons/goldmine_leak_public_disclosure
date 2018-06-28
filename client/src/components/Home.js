@@ -35,6 +35,7 @@ class Home extends Component {
       method: 'post',
       data: {},
     });
+
     const transactions = res.data.transactions;
 
     if (transactions) {
@@ -53,33 +54,17 @@ class Home extends Component {
       method: 'post',
       data: {},
     });
-<<<<<<< HEAD
     
     const { bank_connected_state } = res.data;
 
     if (bank_connected_state > 0 ) {
       const transactions_data = await axios({
-=======
-
-    console.log("getBankConnectedState", res)
-
-    const { bank_connected_state } = res.data;
-
-    console.log("bank connected state is", bank_connected_state)
-
-    if (bank_connected_state) {
-      const res = await axios({
->>>>>>> c8d51c4168ef7a43fed9e50b68d9c6cfffb5f616
         url: '/get_transactions',
         method: 'post',
         data: {},
       });
-<<<<<<< HEAD
 
       const { transactions } = transactions_data.data;
-=======
-      const transactions = res.data.transactions;
->>>>>>> c8d51c4168ef7a43fed9e50b68d9c6cfffb5f616
 
       await this.setState({
         bankConnected: true,
@@ -117,11 +102,7 @@ class Home extends Component {
           )
         ) : (
           <Link
-<<<<<<< HEAD
             initializeBankAccount={this.initializeBankAccount} 
-=======
-            toggleBankConnection={this.toggleBankConnection}
->>>>>>> c8d51c4168ef7a43fed9e50b68d9c6cfffb5f616
           />
         )}
       </div>

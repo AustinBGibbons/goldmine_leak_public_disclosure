@@ -62,7 +62,7 @@ app.post('/get_bank_connected_state', async (req, res) => {
  */
 app.post('/get_transactions', async (req, res) => {
   const user_data = await retrieve_transactions();
-  const { transactions } = user_data[0];
+  const { transactions } = user_data;
   res.send({
     transactions
   })
