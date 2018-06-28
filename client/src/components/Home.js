@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import Header from './Header';
+import { AppState } from '../common';
+import Sidebar from './Sidebar';
 import Link from './Link';
 import TransactionList from './TransactionList';
-
-const AppState = Object.freeze({
-  INIT: Symbol("INIT"),
-  ITEM_LINKED: Symbol("ITEM_LINKED"),
-  PUBLIC_TOKEN_EXCHANGED: Symbol("PUBLIC_TOKEN_EXCHANGED"),
-  TRANSACTIONS_RECEIVED: Symbol("PUBLIC_TOKEN_EXCHANGED")
-});
 
 class Home extends Component {
   constructor(props) {
@@ -84,45 +78,42 @@ class Home extends Component {
     this.getItemLinkedState();
   }
 
-  renderAppState(appState) {
+  renderBody(appState) {
     switch(appState) {
       case AppState.INIT:
         return (
-          <div>
-            <p className="welcome-msg">
-              Welcome to the Plaid Boilerplate Tutorial!
-            </p>
             <Link initializeBankAccount={this.initializeBankAccount} />
-          </div>
         );
       case AppState.ITEM_LINKED:
         return (
           <div>
-            <p>Item Linked! Calling app server to exchange public_token for access_token...</p>
           </div>
         );
       case AppState.PUBLIC_TOKEN_EXCHANGED:
         return (
           <div>
-            <p>Server has access_token! App server is waiting for transactions from Plaid...</p>
           </div>
         );
       case AppState.TRANSACTIONS_RECEIVED:
         return (
-          <div>
-            <p>Received transactions! See below</p>
-            <TransactionList transactions={this.state.transactions}/>
-          </div>
+          <TransactionList transactions={this.state.transactions}/>
         )
     }
   }
+
   render() {
     return(
       <div>
-        <Header/>
-        <div className="container">
-          {this.renderAppState(this.state.appState)}
-        </div>
+          <div className="row">
+            <div className="four columns">
+              <Sidebar appState={this.state.appState} />
+            </div>
+            <div className="eight columns">
+              <div className="container">
+                {this.renderBody(this.state.appState)}
+              </div>
+            </div>
+          </div>
       </div>
     );
   };
