@@ -10,7 +10,7 @@ class Home extends Component {
     super(props);
     this.state = {
       bankConnected: false,
-      transactions: [],
+      transactions: null,
     };
     this.initializeBankAccount = this.initializeBankAccount.bind(this);
   }
@@ -54,7 +54,7 @@ class Home extends Component {
       method: 'post',
       data: {},
     });
-    
+
     const { bank_connected_state } = res.data;
 
     if (bank_connected_state > 0 ) {
@@ -90,7 +90,7 @@ class Home extends Component {
           Please link your bank account.
         </p>
         {this.state.bankConnected ? (
-          this.state.transactions.length > 0 ? (
+          this.state.transactions && this.state.transactions.length > 0 ? (
             <div>
               <p>Bank Connected! See your transactions below.</p>
               <TransactionList transactions={this.state.transactions}/>
@@ -102,7 +102,7 @@ class Home extends Component {
           )
         ) : (
           <Link
-            initializeBankAccount={this.initializeBankAccount} 
+            initializeBankAccount={this.initializeBankAccount}
           />
         )}
       </div>

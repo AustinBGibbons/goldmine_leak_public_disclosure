@@ -10,14 +10,14 @@ class Transaction extends Component {
   }
   render() {
     return(
-      <div>
-         <p className="transaction-name">
+      <tr>
+         <td className="transaction-name">
           {this.state.name}
-        </p>
-        <p className="transaction-amount">
+        </td>
+        <td className="transaction-amount">
           {'$' + this.state.amount}
-        </p>
-      </div>
+        </td>
+      </tr>
     );
   }
 }
