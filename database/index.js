@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-const is_bank_connected = () => {
+const is_item_linked = () => {
   return User.find({'user_id': 1}).count();
 }
 
@@ -71,7 +71,7 @@ const delete_user = async user_id => {
 }
 
 module.exports = {
-  is_bank_connected,
+  is_item_linked,
   create_user,
   retrieve_transactions,
   retrieve_access_token,

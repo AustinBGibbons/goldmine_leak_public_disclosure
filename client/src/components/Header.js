@@ -14,7 +14,7 @@ class Header extends Component {
             <p className="navbar-brand" href="#">
               Boilerplate App 💸⏱
             </p>
-            <a className="dashboard-link" 
+            <a className="dashboard-link"
                href="https://dashboard.plaid.com/account/keys"
                target="_blank">
               Click here to get your API Keys

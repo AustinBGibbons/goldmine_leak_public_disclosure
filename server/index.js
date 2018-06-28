@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 const moment = require('moment');
 
 const {
-  is_bank_connected,
+  is_item_linked,
   create_user,
   retrieve_transactions,
   retrieve_access_token,
@@ -49,10 +49,10 @@ const plaidClient = initPlaidClient();
  * Endpoint for checking whether a user has already connected
  * his/her bank account credentials.
  */
-app.post('/get_bank_connected_state', async (req, res) => {
-  const bank_connected_state = await is_bank_connected();
+app.post('/get_item_linked_state', async (req, res) => {
+  const item_linked_state = await is_item_linked();
   res.send({
-    bank_connected_state,
+    item_linked_state,
   })
 });
 
@@ -125,6 +125,7 @@ app.post('/exchange_token', async (req, res) => {
         return res.json({error: msg});
       }
 
+<<<<<<< HEAD
       const { access_token } = tokenResponse;
       const { item_id } = tokenResponse;
       console.log('Access Token:' , access_token);
@@ -138,6 +139,37 @@ app.post('/exchange_token', async (req, res) => {
       await create_user(user);
       
       res.send({'error': false});
+=======
+      const ACCESS_TOKEN = tokenResponse.access_token;
+      const ITEM_ID = tokenResponse.item_id;
+      console.log('Access Token:' , ACCESS_TOKEN);
+      console.log('Item ID:', ITEM_ID);
+
+      // We make a /transactions/get call to the Plaid API, but we'll
+      // sometimes get hit with a PRODUCT_NOT_READY error
+      const now = moment();
+      const end_date = now.format('YYYY-MM-DD');
+      const start_date = now.subtract(30, 'days').format('YYYY-MM-DD');
+
+      plaidClient.getTransactions(
+        ACCESS_TOKEN,
+        start_date,
+        end_date,
+      ).then( async (response) => {
+        const TRANSACTIONS = response.transactions;
+        const user = {
+          ACCESS_TOKEN,
+          ITEM_ID,
+          TRANSACTIONS,
+        }
+        await create_user(user);
+
+        // We'll return transactions if we retrieve them successfully
+        res.send({TRANSACTIONS});
+      }).catch( (error) => {
+        console.log(error);
+      });
+>>>>>>> f609d8b1a184c8c348526ae70b40c2297f197fd5
 
   });
 });
