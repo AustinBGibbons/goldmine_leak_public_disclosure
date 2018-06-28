@@ -14,7 +14,6 @@ const userSchema = mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 const create_user = async user => {
-
   if (await is_item_linked() > 0) {
     return;
   }

@@ -1409,6 +1409,14 @@ cli-width@^2.0.0:
   version "2.2.0"
   resolved "https://npm.plaid.com/c/cli-width/_attachments/cli-width-2.2.0.tgz#ff19ede8a9a5e579324147b0c11f0fbcbabed639"
 
+clipboard@^2.0.0:
+  version "1.5.5"
+  resolved "https://npm.plaid.com/c/clipboard/_attachments/clipboard-1.5.5.tgz#3b39c5148f5d5055aed9a319814f738454771015"
+  dependencies:
+    good-listener "^1.1.4"
+    select "^1.0.6"
+    tiny-emitter "^1.0.0"
+
 cliui@^4.0.0:
   version "4.1.0"
   resolved "https://npm.plaid.com/c/cliui/_attachments/cliui-4.1.0.tgz#348422dbe82d800b3022eef4f6ac10bf2e4d1b49"
@@ -1416,6 +1424,12 @@ cliui@^4.0.0:
     string-width "^2.1.1"
     strip-ansi "^4.0.0"
     wrap-ansi "^2.0.0"
+
+closest@0.0.1:
+  version "0.0.1"
+  resolved "https://npm.plaid.com/c/closest/_attachments/closest-0.0.1.tgz#26da6f80b3e0e17e71f80f12782819e9f653495c"
+  dependencies:
+    matches-selector "0.0.1"
 
 co@^4.6.0:
   version "4.6.0"
@@ -1729,6 +1743,12 @@ del@^3.0.0:
 delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://npm.plaid.com/d/delayed-stream/_attachments/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
+
+delegate@^3.0.0:
+  version "3.0.0"
+  resolved "https://npm.plaid.com/d/delegate/_attachments/delegate-3.0.0.tgz#fec0d7a4ad9d28cac991b8976412566cd44ecf19"
+  dependencies:
+    closest "0.0.1"
 
 delegates@^1.0.0:
   version "1.0.0"
@@ -2392,6 +2412,12 @@ globby@^6.1.0:
     object-assign "^4.0.1"
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
+
+good-listener@^1.1.4:
+  version "1.1.4"
+  resolved "https://npm.plaid.com/g/good-listener/_attachments/good-listener-1.1.4.tgz#45b8ffd98dbf0f6e20d8d15195427c3e69d07e02"
+  dependencies:
+    delegate "^3.0.0"
 
 got@^3.2.0:
   version "3.3.1"
@@ -3235,6 +3261,10 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+matches-selector@0.0.1:
+  version "0.0.1"
+  resolved "https://npm.plaid.com/m/matches-selector/_attachments/matches-selector-0.0.1.tgz#1df5262243ae341c1a0804dd302048267ac713bb"
+
 math-random@^1.0.1:
   version "1.0.1"
   resolved "https://npm.plaid.com/m/math-random/_attachments/math-random-1.0.1.tgz#8b3aac588b8a66e4975e3cdea67f7bb329601fac"
@@ -4010,6 +4040,12 @@ preserve@^0.2.0:
   version "0.2.0"
   resolved "https://npm.plaid.com/p/preserve/_attachments/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
 
+prismjs@^1.15.0:
+  version "1.15.0"
+  resolved "https://npm.plaid.com/p/prismjs/_attachments/prismjs-1.15.0.tgz#8801d332e472091ba8def94976c8877ad60398d9"
+  optionalDependencies:
+    clipboard "^2.0.0"
+
 private@^0.1.6, private@^0.1.8:
   version "0.1.8"
   resolved "https://npm.plaid.com/p/private/_attachments/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
@@ -4504,6 +4540,10 @@ select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://npm.plaid.com/s/select-hose/_attachments/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
 
+select@^1.0.6:
+  version "1.0.6"
+  resolved "https://npm.plaid.com/s/select/_attachments/select-1.0.6.tgz#daabcc99009b2fb988944c8880f773265ef90e5e"
+
 selfsigned@^1.9.1:
   version "1.10.3"
   resolved "https://npm.plaid.com/s/selfsigned/_attachments/selfsigned-1.10.3.tgz#d628ecf9e3735f84e8bafba936b3cf85bea43823"
@@ -4952,6 +4992,10 @@ timers-browserify@^2.0.4:
   dependencies:
     setimmediate "^1.0.4"
 
+tiny-emitter@^1.0.0:
+  version "1.0.2"
+  resolved "https://npm.plaid.com/t/tiny-emitter/_attachments/tiny-emitter-1.0.2.tgz#8e49470d3f55f89e247210368a6bb9fb51aa1601"
+
 tmp@^0.0.33:
   version "0.0.33"
   resolved "https://npm.plaid.com/t/tmp/_attachments/tmp-0.0.33.tgz#6d34335889768d21b2bcda0aa277ced3b1bfadf9"
@@ -5124,8 +5168,8 @@ urix@^0.1.0:
   resolved "https://npm.plaid.com/u/urix/_attachments/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
 
 url-join@^4.0.0:
-  version "0.0.1"
-  resolved "https://npm.plaid.com/u/url-join/_attachments/url-join-0.0.1.tgz#1db48ad422d3402469a87f7d97bdebfe4fb1e3c8"
+  version "4.0.0"
+  resolved "https://npm.plaid.com/u/url-join/_attachments/url-join-4.0.0.tgz#4d3340e807d3773bda9991f8305acdcc2a665d2a"
 
 url-parse@^1.1.8, url-parse@~1.4.0:
   version "1.4.1"

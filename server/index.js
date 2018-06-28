@@ -32,7 +32,7 @@ const initPlaidClient = () => {
   const PLAID_SECRET = process.env.PLAID_SECRET;
   const PLAID_PUBLIC_KEY = process.env.PLAID_PUBLIC_KEY;
   const PLAID_ENV = process.env.PLAID_ENV || 'sandbox';
-  
+
   const plaidClient = new plaid.Client(
     PLAID_CLIENT_ID,
     PLAID_SECRET,
@@ -77,7 +77,7 @@ app.post('/get_transactions', async (req, res) => {
 app.post('/webhook', async (req, res) => {
   const { item_id } = req.body;
   const { webhook_code } = req.body;
-  
+
   const data = await retrieve_access_token(item_id);
   const { access_token } = data[0];
 
@@ -94,11 +94,11 @@ app.post('/webhook', async (req, res) => {
   } else if (webhook_code === 'DEFAULT_UPDATE') {
     start_date = now.subtract(90, 'days').format('YYYY-MM-DD');
   }
-  
+
   plaidClient.getTransactions(
     access_token,
     start_date,
-    end_date 
+    end_date
   ).then( async (response) => {
     const { transactions } = response;
     await save_transactions(access_token, transactions);
@@ -136,7 +136,7 @@ app.post('/exchange_token', async (req, res) => {
         transactions: [],
       }
       await create_user(user);
-      
+
       res.send({'error': false});
 
   });
