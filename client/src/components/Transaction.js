@@ -15,7 +15,7 @@ class Transaction extends Component {
           {this.state.name}
         </td>
         <td className="transaction-amount">
-          {'$' + this.state.amount}
+          {'$' + this.state.amount.toFixed(2)}
         </td>
       </tr>
     );

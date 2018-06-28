@@ -11,7 +11,7 @@ class Link extends Component {
     // through Link.
     this.initializeBankAccount = this.props.initializeBankAccount;
 
-    // These funcionts are Link callbacks.
+    // These functions are Link callbacks.
     this.handleOnExit = this.handleOnExit.bind(this);
     this.handleOnSuccess = this.handleOnSuccess.bind(this);
     this.handleOnEvent = this.handleOnEvent.bind(this);
@@ -19,7 +19,7 @@ class Link extends Component {
   }
 
   async handleOnSuccess(public_token, metadata) {
-    const transactions_data = await axios({
+    await axios({
       url: '/exchange_token',
       method: 'post',
       data: {
@@ -27,8 +27,6 @@ class Link extends Component {
         metadata,
       }
     });
-
-    // const { transactions } = transactions_data.data;
 
     this.initializeBankAccount();
   }
@@ -55,7 +53,7 @@ class Link extends Component {
         publicKey="2ca704caf9cd7b6d54fd1b1d6dfcd2"
         product={['transactions']}
         apiVersion='v2'
-        webhook="https://webhook.site/bcd6817d-05d7-4aab-bcd2-ea86a2b7bf23"
+        webhook="http://1f5643ee.ngrok.io/webhook"
         onEvent={this.handleOnEvent}
         onExit={this.handleOnExit}
         onLoad={this.handleOnLoad}
