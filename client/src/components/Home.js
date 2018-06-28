@@ -5,20 +5,26 @@ import Header from './Header';
 import Link from './Link';
 import TransactionList from './TransactionList';
 
+const AppState = Object.freeze({
+  INIT: Symbol("INIT"),
+  ITEM_LINKED: Symbol("ITEM_LINKED"),
+  PUBLIC_TOKEN_EXCHANGED: Symbol("PUBLIC_TOKEN_EXCHANGED"),
+  TRANSACTIONS_RECEIVED: Symbol("PUBLIC_TOKEN_EXCHANGED")
+});
+
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bankConnected: false,
+      appState: AppState.INIT,
       transactions: null,
     };
     this.initializeBankAccount = this.initializeBankAccount.bind(this);
   }
 
-  initializeBankAccount(TRANSACTIONS) {
+  initializeBankAccount() {
     this.setState({
-      bankConnected: true,
-      transactions: TRANSACTIONS,
+      appState: AppState.ITEM_LINKED,
     });
 
     // Start polling for transactions. We do this because the server is currently
@@ -38,73 +44,85 @@ class Home extends Component {
 
     const transactions = res.data.transactions;
 
+    // Check if our app server has received transactions for the linked item.
+    // It usually takes 30-240 seconds for the first transaction pull to complete
+    // https://plaid.com/docs/quickstart/#pulling-transaction-data
     if (transactions) {
       console.log("fetchTransactions end poll");
       clearInterval(this.fetchTransactionsInterval);
 
       this.setState({
+        appState: AppState.TRANSACTIONS_RECEIVED,
         transactions,
       });
     }
   }
 
-  async getBankConnectedState() {
+  async getItemLinkedState() {
     const res = await axios({
-      url: '/get_bank_connected_state',
+      url: '/get_item_linked_state',
       method: 'post',
       data: {},
     });
 
-    const { bank_connected_state } = res.data;
+    const { item_linked_state } = res.data;
 
-    if (bank_connected_state > 0 ) {
-      const transactions_data = await axios({
-        url: '/get_transactions',
-        method: 'post',
-        data: {},
+    if (item_linked_state > 0) {
+      console.log("getItemLinkedState", item_linked_state)
+      // Logged in user has already linked an item
+      this.setState({
+        appState: AppState.ITEM_LINKED
       });
 
-      const { transactions } = transactions_data.data;
-
-      await this.setState({
-        bankConnected: true,
-        transactions,
-      });
-    } else {
-      await this.setState({
-        bankConnected: false,
-      });
+      // Since the user has already linked an item, we can now fetch
+      // transactions for that item
+      this.fetchTransactions();
     }
   }
 
   componentDidMount() {
-    this.getBankConnectedState();
+    this.getItemLinkedState();
   }
 
+  renderAppState(appState) {
+    switch(appState) {
+      case AppState.INIT:
+        return (
+          <div>
+            <p className="welcome-msg">
+              Welcome to the Plaid Boilerplate Tutorial!
+            </p>
+            <Link initializeBankAccount={this.initializeBankAccount} />
+          </div>
+        );
+      case AppState.ITEM_LINKED:
+        return (
+          <div>
+            <p>Item Linked! Calling app server to exchange public_token for access_token...</p>
+          </div>
+        );
+      case AppState.PUBLIC_TOKEN_EXCHANGED:
+        return (
+          <div>
+            <p>Server has access_token! App server is waiting for transactions from Plaid...</p>
+          </div>
+        );
+      case AppState.TRANSACTIONS_RECEIVED:
+        return (
+          <div>
+            <p>Received transactions! See below</p>
+            <TransactionList transactions={this.state.transactions}/>
+          </div>
+        )
+    }
+  }
   render() {
     return(
-      <div className="home-container">
+      <div>
         <Header/>
-        <p className="welcome-msg">
-          Welcome to the Plaid Boilerplate Tutorial!
-          Please link your bank account.
-        </p>
-        {this.state.bankConnected ? (
-          this.state.transactions && this.state.transactions.length > 0 ? (
-            <div>
-              <p>Bank Connected! See your transactions below.</p>
-              <TransactionList transactions={this.state.transactions}/>
-            </div>
-          ) : (
-            <div>
-              <p>Bank Connected! Loading transactions...</p>
-            </div>
-          )
-        ) : (
-          <Link
-            initializeBankAccount={this.initializeBankAccount}
-          />
-        )}
+        <div className="container">
+          {this.renderAppState(this.state.appState)}
+        </div>
       </div>
     );
   };

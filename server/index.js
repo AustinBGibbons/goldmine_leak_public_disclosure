@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 const moment = require('moment');
 
 const {
-  is_bank_connected,
+  is_item_linked,
   create_user,
   retrieve_transactions,
   save_transactions,
@@ -48,10 +48,10 @@ const plaidClient = initPlaidClient();
  * Endpoint for checking whether a user has already connected
  * his/her bank account credentials.
  */
-app.post('/get_bank_connected_state', async (req, res) => {
-  const bank_connected_state = await is_bank_connected();
+app.post('/get_item_linked_state', async (req, res) => {
+  const item_linked_state = await is_item_linked();
   res.send({
-    bank_connected_state,
+    item_linked_state,
   })
 });
 
@@ -117,7 +117,7 @@ app.post('/exchange_token', async (req, res) => {
           TRANSACTIONS,
         }
         await create_user(user);
-        
+
         // We'll return transactions if we retrieve them successfully
         res.send({TRANSACTIONS});
       }).catch( (error) => {

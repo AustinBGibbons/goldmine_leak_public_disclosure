@@ -28,9 +28,9 @@ class Link extends Component {
       }
     });
 
-    const { TRANSACTIONS } = transactions_data.data;
+    // const { transactions } = transactions_data.data;
 
-    this.initializeBankAccount(TRANSACTIONS);
+    this.initializeBankAccount();
   }
 
   async handleOnEvent(eventName, metadata) {
@@ -52,7 +52,7 @@ class Link extends Component {
         clientName="Boilerplate"
         env="sandbox"
         institution={null}
-        publicKey="c53a213ab2d73e2c0376babf83bd3b"
+        publicKey="2ca704caf9cd7b6d54fd1b1d6dfcd2"
         product={['transactions']}
         apiVersion='v2'
         webhook="https://webhook.site/bcd6817d-05d7-4aab-bcd2-ea86a2b7bf23"
