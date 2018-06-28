@@ -20,11 +20,11 @@ const port = process.env.PORT || 8000;
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client/dist'));
 
-/** 
+/**
  * Initializes a new Plaid Client using your public_key,
  * client_id, and secret_key. These are all found on your
  * Plaid Dashboard
- * @returns initialized plaid client 
+ * @returns initialized plaid client
  */
 const initPlaidClient = () => {
   const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
@@ -70,7 +70,7 @@ app.post('/get_transactions', async (req, res) => {
 
 /**
  * Endpoint for webhook notifications.
- * You can then perform actions accordingly (i.e fetching 
+ * You can then perform actions accordingly (i.e fetching
  * fresh transactions data from Plaid's servers).
  */
 app.post('/webhook', (req, res) => {
@@ -86,11 +86,11 @@ app.post('/exchange_token', async (req, res) => {
   const PUBLIC_TOKEN = req.body.public_token;
 
   plaidClient.exchangePublicToken(
-    PUBLIC_TOKEN, 
+    PUBLIC_TOKEN,
     async (error, tokenResponse) => {
       if (error != null) {
         const msg = 'Could not exchange public_token!';
-        console.log(msg + '\n' + error);
+        console.log(msg, error);
         return res.json({error: msg});
       }
 
@@ -100,15 +100,15 @@ app.post('/exchange_token', async (req, res) => {
       console.log('Item ID:', ITEM_ID);
 
       // We make a /transactions/get call to the Plaid API, but we'll
-      // sometimes get hit with a PRODUCT_NOT_READY error 
+      // sometimes get hit with a PRODUCT_NOT_READY error
       const now = moment();
       const end_date = now.format('YYYY-MM-DD');
       const start_date = now.subtract(30, 'days').format('YYYY-MM-DD');
-      
+
       plaidClient.getTransactions(
-        ACCESS_TOKEN, 
-        start_date, 
-        end_date, 
+        ACCESS_TOKEN,
+        start_date,
+        end_date,
       ).then( async (response) => {
         const TRANSACTIONS = response.transactions;
         const user = {

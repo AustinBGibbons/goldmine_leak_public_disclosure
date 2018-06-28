@@ -19,9 +19,10 @@ const is_bank_connected = () => {
 }
 
 const create_user = async user => {
+  // TODO: make sure we don't insert a user_id multiple times
   const { ACCESS_TOKEN } = user;
   const { ITEM_ID } = user;
-  const { TRANSACTIONS } = user; 
+  const { TRANSACTIONS } = user;
 
   const new_user = new User({
     user_id: 1,
@@ -31,17 +32,17 @@ const create_user = async user => {
   });
 
   await new_user.save();
-  return; 
+  return;
 }
 
 const retrieve_transactions = () => {
-  return User.find({'user_id': 1});
+  return User.findOne({'user_id': 1});
 }
 
 /**
  * Updates transactions in our database as needed for users
- * 
- * @param {Array} transactions 
+ *
+ * @param {Array} transactions
  */
 const save_transactions = async (ACCESS_TOKEN, transactions) => {
   const query = { access_token: ACCESS_TOKEN };
