@@ -2,10 +2,13 @@ const express = require('express');
 const plaid = require('plaid');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
+const moment = require('moment');
 
 const {
+  is_bank_connected,
   create_user,
   retrieve_transactions,
+  save_transactions,
   delete_user
 } = require('../database/index');
 
@@ -42,6 +45,30 @@ const initPlaidClient = () => {
 const plaidClient = initPlaidClient();
 
 /**
+ * Endpoint for checking whether a user has already connected
+ * his/her bank account credentials.
+ */
+app.post('/get_bank_connected_state', async (req, res) => {
+  const bank_connected_state = await is_bank_connected();
+  res.send({
+    bank_connected_state,
+  })
+});
+
+
+/**
+ * Endpoint for fetching transactions for a user from our
+ * mongo database.
+ */
+app.post('/get_transactions', async (req, res) => {
+  const user_data = await retrieve_transactions();
+  const { transactions } = user_data;
+  res.send({
+    transactions
+  })
+});
+
+/**
  * Endpoint for webhook notifications.
  * You can then perform actions accordingly (i.e fetching 
  * fresh transactions data from Plaid's servers).
@@ -72,15 +99,30 @@ app.post('/exchange_token', async (req, res) => {
       console.log('Access Token:' , ACCESS_TOKEN);
       console.log('Item ID:', ITEM_ID);
 
-      const user = {
-        ACCESS_TOKEN,
-        ITEM_ID,
+      // We make a /transactions/get call to the Plaid API, but we'll
+      // sometimes get hit with a PRODUCT_NOT_READY error 
+      const now = moment();
+      const end_date = now.format('YYYY-MM-DD');
+      const start_date = now.subtract(30, 'days').format('YYYY-MM-DD');
+      
+      plaidClient.getTransactions(
+        ACCESS_TOKEN, 
+        start_date, 
+        end_date, 
+      ).then( async (response) => {
+        const TRANSACTIONS = response.transactions;
+        const user = {
+          ACCESS_TOKEN,
+          ITEM_ID,
+          TRANSACTIONS,
+        }
+        await create_user(user);
+        console.log("Transactions is ", TRANSACTIONS)
+        res.send({'error': false});
+      }).catch( (error) => {
+        console.log(error);
+      });
 
-      }
-
-      await create_user(user);
-
-      res.send({'error': false});
   });
 });
 
