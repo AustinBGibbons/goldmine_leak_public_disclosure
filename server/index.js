@@ -8,6 +8,7 @@ const {
   is_bank_connected,
   create_user,
   retrieve_transactions,
+  retrieve_access_token,
   save_transactions,
   delete_user
 } = require('../database/index');
@@ -62,7 +63,7 @@ app.post('/get_bank_connected_state', async (req, res) => {
  */
 app.post('/get_transactions', async (req, res) => {
   const user_data = await retrieve_transactions();
-  const { transactions } = user_data;
+  const { transactions } = user_data[0];
   res.send({
     transactions
   })
@@ -70,11 +71,41 @@ app.post('/get_transactions', async (req, res) => {
 
 /**
  * Endpoint for webhook notifications.
- * You can then perform actions accordingly (i.e fetching
- * fresh transactions data from Plaid's servers).
+ * You can then perform actions accordingly. This app example
+ * only handles TRANSACTIONS updates. 
  */
-app.post('/webhook', (req, res) => {
+app.post('/webhook', async (req, res) => {
+  const { item_id } = req.body;
+  const { webhook_code } = req.body;
+  
+  const data = await retrieve_access_token(item_id);
+  const { access_token } = data[0];
 
+  const now = moment();
+  const end_date = now.format('YYYY-MM-DD');
+  let start_date;
+
+  // The following are recommended date ranges when pulling 
+  // transactions data for certain updates.
+  if (webhook_code === 'INITIAL_UPDATE') {
+    start_date = now.subtract(30, 'days').format('YYYY-MM-DD');
+  } else if (webhook_code === 'HISTORICAL_UPDATE') {
+    start_date = now.subtract(2, 'years').format('YYYY-MM-DD');
+  } else if (webhook_code === 'DEFAULT_UPDATE') {
+    start_date = now.subtract(90, 'days').format('YYYY-MM-DD');
+  }
+  
+  plaidClient.getTransactions(
+    access_token,
+    start_date,
+    end_date 
+  ).then( async (response) => {
+    const { transactions } = response;
+    await save_transactions(access_token, transactions);
+    res.send({'error': false});
+  }).catch( (error) => {
+    console.log(error);
+  });
 
 });
 
@@ -94,35 +125,19 @@ app.post('/exchange_token', async (req, res) => {
         return res.json({error: msg});
       }
 
-      const ACCESS_TOKEN = tokenResponse.access_token;
-      const ITEM_ID = tokenResponse.item_id;
-      console.log('Access Token:' , ACCESS_TOKEN);
-      console.log('Item ID:', ITEM_ID);
+      const { access_token } = tokenResponse;
+      const { item_id } = tokenResponse;
+      console.log('Access Token:' , access_token);
+      console.log('Item ID:', item_id);
 
-      // We make a /transactions/get call to the Plaid API, but we'll
-      // sometimes get hit with a PRODUCT_NOT_READY error
-      const now = moment();
-      const end_date = now.format('YYYY-MM-DD');
-      const start_date = now.subtract(30, 'days').format('YYYY-MM-DD');
-
-      plaidClient.getTransactions(
-        ACCESS_TOKEN,
-        start_date,
-        end_date,
-      ).then( async (response) => {
-        const TRANSACTIONS = response.transactions;
-        const user = {
-          ACCESS_TOKEN,
-          ITEM_ID,
-          TRANSACTIONS,
-        }
-        await create_user(user);
-        
-        // We'll return transactions if we retrieve them successfully
-        res.send({TRANSACTIONS});
-      }).catch( (error) => {
-        console.log(error);
-      });
+      const user = {
+        access_token,
+        item_id,
+        transactions: [],
+      }
+      await create_user(user);
+      
+      res.send({'error': false});
 
   });
 });

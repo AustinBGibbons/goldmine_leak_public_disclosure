@@ -14,11 +14,13 @@ class TransactionList extends Component {
       <div className="transaction-list">
         <h5>Your Transactions:</h5>
         <table className="u-full-width">
-          {this.state.transactions.map( (transaction, index) => {
-            return (
-              <Transaction transaction={transaction}/>
-            );
-          })}
+          <tbody>
+            {this.state.transactions.map( (transaction, index) => {
+              return (
+                <Transaction key={index} transaction={transaction}/>
+              );
+            })}
+          </tbody>
         </table>
       </div>
     );

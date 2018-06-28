@@ -20,23 +20,36 @@ const is_bank_connected = () => {
 
 const create_user = async user => {
   // TODO: make sure we don't insert a user_id multiple times
-  const { ACCESS_TOKEN } = user;
-  const { ITEM_ID } = user;
-  const { TRANSACTIONS } = user;
+  if (await is_bank_connected() > 0) {
+    return;
+  }
+
+  const { access_token } = user;
+  const { item_id } = user;
+  const { transactions } = user;
 
   const new_user = new User({
     user_id: 1,
-    access_token: ACCESS_TOKEN,
-    item_id: ITEM_ID,
-    transactions: TRANSACTIONS,
+    access_token,
+    item_id,
+    transactions: transactions,
   });
 
   await new_user.save();
   return;
 }
 
+/**
+ * Retrieves a user's access_token given their item_id
+ * 
+ * @param {String} item_id 
+ */
+const retrieve_access_token = (item_id) => {
+  return User.find({'item_id' : item_id});
+}
+
 const retrieve_transactions = () => {
-  return User.findOne({'user_id': 1});
+  return User.find({'user_id': 1});
 }
 
 /**
@@ -61,6 +74,7 @@ module.exports = {
   is_bank_connected,
   create_user,
   retrieve_transactions,
+  retrieve_access_token,
   save_transactions,
   delete_user,
 }

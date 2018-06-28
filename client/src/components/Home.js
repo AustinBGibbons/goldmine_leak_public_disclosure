@@ -15,10 +15,9 @@ class Home extends Component {
     this.initializeBankAccount = this.initializeBankAccount.bind(this);
   }
 
-  initializeBankAccount(TRANSACTIONS) {
+  initializeBankAccount() {
     this.setState({
       bankConnected: true,
-      transactions: TRANSACTIONS,
     });
 
     // Start polling for transactions. We do this because the server is currently
@@ -37,8 +36,7 @@ class Home extends Component {
     });
 
     const transactions = res.data.transactions;
-
-    if (transactions) {
+    if (transactions.length > 0) {
       console.log("fetchTransactions end poll");
       clearInterval(this.fetchTransactionsInterval);
 
@@ -87,7 +85,6 @@ class Home extends Component {
         <Header/>
         <p className="welcome-msg">
           Welcome to the Plaid Boilerplate Tutorial!
-          Please link your bank account.
         </p>
         {this.state.bankConnected ? (
           this.state.transactions && this.state.transactions.length > 0 ? (
