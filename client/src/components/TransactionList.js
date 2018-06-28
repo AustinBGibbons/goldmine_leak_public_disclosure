@@ -14,10 +14,10 @@ class TransactionList extends Component {
       <div className="transaction-list">
         <h5>Your Transactions:</h5>
         <ol>
-          {this.state.transactions.map( (transactions, index) => {
+          {this.state.transactions.map( (transaction, index) => {
             return (
               <li key={index}>
-                <Transaction />
+                <Transaction transaction={transaction}/>
               </li>
             );
           })}

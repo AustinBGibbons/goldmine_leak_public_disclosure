@@ -6,7 +6,12 @@ class Link extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.toggleBankConnection = this.props.toggleBankConnection;
+
+    // These functions are run after a successful Item Creation
+    // through Link.
+    this.initializeBankAccount = this.props.initializeBankAccount;
+
+    // These funcionts are Link callbacks.
     this.handleOnExit = this.handleOnExit.bind(this);
     this.handleOnSuccess = this.handleOnSuccess.bind(this);
     this.handleOnEvent = this.handleOnEvent.bind(this);
@@ -14,7 +19,7 @@ class Link extends Component {
   }
 
   async handleOnSuccess(public_token, metadata) {
-    await axios({
+    const transactions_data = await axios({
       url: '/exchange_token',
       method: 'post',
       data: {
@@ -22,7 +27,10 @@ class Link extends Component {
         metadata,
       }
     });
-    this.toggleBankConnection();
+
+    const { TRANSACTIONS } = transactions_data.data;
+
+    this.initializeBankAccount(TRANSACTIONS);
   }
 
   async handleOnEvent(eventName, metadata) {

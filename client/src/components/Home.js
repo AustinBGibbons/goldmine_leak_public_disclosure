@@ -12,12 +12,13 @@ class Home extends Component {
       bankConnected: false,
       transactions: [],
     };
-    this.toggleBankConnection = this.toggleBankConnection.bind(this);
+    this.initializeBankAccount = this.initializeBankAccount.bind(this);
   }
 
-  toggleBankConnection() {
+  initializeBankAccount(TRANSACTIONS) {
     this.setState({
       bankConnected: true,
+      transactions: TRANSACTIONS,
     });
   }
 
@@ -28,25 +29,23 @@ class Home extends Component {
       data: {},
     });
     
-    const { bank_connected_state } = res;
+    const { bank_connected_state } = res.data;
 
-    console.log("bank connected state is", bank_connected_state)
-
-    if (bank_connected_state) {
+    if (bank_connected_state > 0 ) {
       const transactions_data = await axios({
         url: '/get_transactions',
         method: 'post',
         data: {},
       });
 
-      const transactions = { transactions_data };
+      const { transactions } = transactions_data.data;
 
-      this.setState({
+      await this.setState({
         bankConnected: true,
         transactions: transactions,
       });
     } else {
-      this.setState({
+      await this.setState({
         bankConnected: false,
       });
     }
@@ -71,7 +70,7 @@ class Home extends Component {
           </div>
         ) : (
           <Link
-            toggleBankConnection={this.toggleBankConnection} 
+            initializeBankAccount={this.initializeBankAccount} 
           />
         )}
       </div>

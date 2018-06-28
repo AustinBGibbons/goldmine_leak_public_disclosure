@@ -62,7 +62,7 @@ app.post('/get_bank_connected_state', async (req, res) => {
  */
 app.post('/get_transactions', async (req, res) => {
   const user_data = await retrieve_transactions();
-  const { transactions } = user_data;
+  const { transactions } = user_data[0];
   res.send({
     transactions
   })
@@ -117,8 +117,9 @@ app.post('/exchange_token', async (req, res) => {
           TRANSACTIONS,
         }
         await create_user(user);
-        console.log("Transactions is ", TRANSACTIONS)
-        res.send({'error': false});
+        
+        // We'll return transactions if we retrieve them successfully
+        res.send({TRANSACTIONS});
       }).catch( (error) => {
         console.log(error);
       });
