@@ -29,7 +29,7 @@ class Home extends Component {
   }
 
   async fetchTransactions() {
-    console.log("fetchTransactions start poll");
+    console.log("fetchTransactions poll");
     const res = await axios({
       url: '/get_transactions',
       method: 'post',
@@ -41,7 +41,7 @@ class Home extends Component {
     // Check if our app server has received transactions for the linked item.
     // It usually takes 30-240 seconds for the first transaction pull to complete
     // https://plaid.com/docs/quickstart/#pulling-transaction-data
-    if (transactions) {
+    if (transactions.length > 0) {
       console.log("fetchTransactions end poll");
       clearInterval(this.fetchTransactionsInterval);
 

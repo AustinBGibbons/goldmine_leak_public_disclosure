@@ -20,7 +20,7 @@ class Sidebar extends Component {
               Step 1: Create a .env file with your API keys:
             </p>
             <pre>
-              <code class="language-bash">
+              <code className="language-bash">
 {`PORT=8000
 PLAID_CLIENT_ID=<your client id>
 PLAID_SECRET=<your secret>

@@ -53,7 +53,7 @@ class Link extends Component {
         publicKey="2ca704caf9cd7b6d54fd1b1d6dfcd2"
         product={['transactions']}
         apiVersion='v2'
-        webhook="http://1f5643ee.ngrok.io/webhook"
+        webhook="http://532a652f.ngrok.io/webhook"
         onEvent={this.handleOnEvent}
         onExit={this.handleOnExit}
         onLoad={this.handleOnLoad}
