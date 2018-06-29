@@ -6,7 +6,7 @@
   },
   "description": "Plaid Boilerplate app",
   "main": "index.js",
-  "repository": "git@github.plaid.com:plaid/boilerplate.git",
+  "repository": "git@github.plaid.com:austinbgibbons/goldmine_leak_public_disclosure.git.git",
   "scripts": {
     "start": "nodemon server/index.js",
     "build": "webpack -d --watch"
