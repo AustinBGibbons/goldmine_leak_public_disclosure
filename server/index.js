@@ -10,6 +10,7 @@ const {
   retrieve_transactions,
   retrieve_access_token,
   save_transactions,
+  save_auth,
   delete_user
 } = require('../database/index');
 
@@ -111,13 +112,43 @@ app.post('/webhook', async (req, res) => {
 });
 
 /**
+ * Endpoint for calling get auth
+ */
+app.post('/get_auth', async (req, res) => {
+  const { user_id } = req.body;
+  console.log("user id is ", user_id);
+  
+  const item = await is_item_linked(user_id);
+  const { access_token } = item[0];
+
+  plaidClient.getAuth(
+    access_token,
+  ).then( async (authResponse) => {
+
+    const accounts_data = authResponse.numbers;
+    console.log("Accounts Data are", accounts_data)
+    res.json({
+      error: false,
+    });
+    
+  }).catch( error => {
+    const msg = 'Could not get Auth data!';
+    console.log(msg, error);
+    res.json({ 
+      error: true,
+      message: msg
+    });
+  });
+
+
+});
+
+/**
  * Endpoint for the exchange token process
  */
 app.post('/exchange_token', async (req, res) => {
 
   const PUBLIC_TOKEN = req.body.public_token;
-  const METADATA = req.body.metadata;
-  console.log("metadata", METADATA);
 
   plaidClient.exchangePublicToken(
     PUBLIC_TOKEN
@@ -125,46 +156,21 @@ app.post('/exchange_token', async (req, res) => {
 
     const { access_token } = tokenResponse;
     const { item_id } = tokenResponse;
-    const { account_id } = METADATA;
-    const mask = METADATA.account.mask;
-    const account_name = METADATA.account.name;
 
-    // It is recommended to make an Auth call here as soon as you get
-    // the Item's access_token. For the purposes of this app, we have
-    // enabled linking for only one account. This can be done in the
-    // Plaid Dashboard in the 'Customize' tab -> 'Select Accounts'.
-    const options = account_id ? {
-      account_ids : [account_id],
-    } : {};
-
-    plaidClient.getAuth(
+    const user = {
       access_token,
-      options,
-    ).then( async (authResponse) => {
+      item_id,
+      transactions: [],
+      // account_id: null,
+      // routing_number: null,
+      // account_number: null,
+      // mask: null,
+      // account_name: null,
+    }
 
-      const accounts_data = authResponse.numbers[0];
-      const routing_number = accounts_data.routing;
-      const account_number = accounts_data.account;
+    await create_user(user);
 
-      const user = {
-        access_token,
-        item_id,
-        transactions: [],
-        account_id,
-        routing_number,
-        account_number,
-        mask,
-        account_name,
-      }
-
-      await create_user(user);
-
-      res.send({'error': false});
-    }).catch( error => {
-      const msg = 'Could not get Auth data!';
-      console.log(msg, error);
-      return res.json({error: msg});
-    });
+    res.send({'error': false});
 
   }).catch( error => {
     const msg = 'Could not exchange public_token!';

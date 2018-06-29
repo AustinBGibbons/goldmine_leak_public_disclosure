@@ -20,6 +20,10 @@ class Sidebar extends Component {
     this.props.reset();
   }
 
+  handleGetAuth() {
+    this.props.getAuth();
+  }
+
   renderAppState(appState) {
     switch(appState) {
       case AppState.LOADING:
@@ -68,11 +72,39 @@ PLAID_ENV=sandbox`}
           <div>
             <h3>Step 4</h3>
             <p>Received transactions!</p>
+            <p>You've linked an Item for Transactions!</p>
+            <p>You can see your transactions on the right.</p>
+            <p className="big-emoji">🕵️‍</p>
+            <p>Now, let's try authenticating an account using Plaid's Auth product.</p>
+            <a className="button button-primary" onClick={this.handleGetAuth.bind(this)}>Authenticate Account</a>
+          </div>
+        )
+      case AppState.AUTH_ERROR:
+        return (
+          <div>
+            <h3>Step 4</h3>
+            <p>Account Not Supported for Auth!</p>
+            <p className="big-emoji">😱</p>
+            <p>
+              Auth is only supported for depository and savings accounts. Therefore,
+              you won't be able to call the /auth/get endpoint for Items from 
+              certain Financial Insitutions such as American Express. However, you can 
+              initialize Link with "Auth" instead of "Transactions" and have your user
+              re-Link an Item with a different account. Notice how only certain
+              Financial Institutions show up when you initialize Link with "Auth"
+              instead of "Transactions".
+            </p>
+
+          </div>
+        )
+      case AppState.AUTH_COMPLETED:
+        return (
+          <div>
+            <h3>Step 5</h3>
+            <p>Account Authenticated!</p>
             <p>You've completed all the steps for a basic Plaid app, congrats!</p>
             <p className="big-emoji">🎉</p>
-            <p>You are now seeing transactions for</p>
-            <p>Account Name: {this.props.account_name}</p>
-            <p>Mask: {this.props.mask}</p>
+            <p>Now, go build something even better!</p>
 
             <a className="button button-primary" onClick={this.handleReset.bind(this)}>Start Over</a>
           </div>
