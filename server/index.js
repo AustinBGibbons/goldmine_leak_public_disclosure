@@ -128,7 +128,9 @@ app.post('/exchange_token', async (req, res) => {
     const account_name = METADATA.account.name;
 
     // It is recommended to make an Auth call here as soon as you get 
-    // the Item's access_token. 
+    // the Item's access_token. For the purposes of this app, we have
+    // enabled linking for only one account. This can be done in the
+    // Plaid Dashboard in the 'Customize' tab -> 'Select Accounts'.
     const options = {
       account_ids : [account_id],
     }
