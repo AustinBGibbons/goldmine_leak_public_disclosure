@@ -9,6 +9,11 @@ const userSchema = mongoose.Schema({
   access_token: String,
   item_id: String,
   transactions: [],
+  account_id: String,
+  account_number: String,
+  routing_number: String,
+  mask: String,
+  account_name: String,
 });
 
 const User = mongoose.model('User', userSchema);
@@ -18,15 +23,27 @@ const create_user = async user => {
     return;
   }
 
-  const { access_token } = user;
-  const { item_id } = user;
-  const { transactions } = user;
+  const { 
+    access_token,
+    item_id,
+    transactions,
+    account_id,
+    account_number,
+    routing_number,
+    mask,
+    account_name,
+  } = user;
 
   const new_user = new User({
     user_id: 1,
     access_token,
     item_id,
-    transactions: transactions,
+    transactions,
+    account_id,
+    account_number,
+    routing_number,
+    mask,
+    account_name,
   });
 
   await new_user.save();
@@ -39,7 +56,7 @@ const create_user = async user => {
  * has already been created or not.
  */
 const is_item_linked = () => {
-  return User.find({'user_id': 1}).count();
+  return User.find({'user_id': 1});
 }
 
 /**

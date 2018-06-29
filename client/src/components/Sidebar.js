@@ -5,7 +5,10 @@ import { AppState } from '../common';
 class Sidebar extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      account_name: this.props.account_name,
+      mask: this.props.mask,
+    };
   }
 
   renderAppState(appState) {
@@ -20,7 +23,7 @@ class Sidebar extends Component {
               Step 1: Create a .env file with your API keys:
             </p>
             <pre>
-              <code class="language-bash">
+              <code className="language-bash">
 {`PORT=8000
 PLAID_CLIENT_ID=<your client id>
 PLAID_SECRET=<your secret>
@@ -51,7 +54,9 @@ PLAID_ENV=sandbox
       case AppState.TRANSACTIONS_RECEIVED:
         return (
           <div>
-            <p>Received transactions! See below</p>
+            <p>You are now seeing transactions for</p>
+            <p>Account Name: {this.props.account_name}</p>
+            <p>Mask: {this.props.mask}</p>
           </div>
         )
     }
@@ -62,7 +67,7 @@ PLAID_ENV=sandbox
       <div>
         <div className="sidebar">
           <div className="logo">
-            <a href="#">
+            <a href="/">
               Boilerplate App 💸⏱
             </a>
           </div>

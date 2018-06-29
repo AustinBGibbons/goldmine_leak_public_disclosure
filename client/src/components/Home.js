@@ -11,14 +11,18 @@ class Home extends Component {
     super(props);
     this.state = {
       appState: AppState.INIT,
+      account_name: null,
+      mask: null,
       transactions: null,
     };
     this.initializeBankAccount = this.initializeBankAccount.bind(this);
   }
 
-  initializeBankAccount() {
+  initializeBankAccount(account_name, mask) {
     this.setState({
       appState: AppState.ITEM_LINKED,
+      account_name,
+      mask,
     });
 
     // Start polling for transactions. We do this because the server is currently
@@ -29,7 +33,7 @@ class Home extends Component {
   }
 
   async fetchTransactions() {
-    console.log("fetchTransactions start poll");
+    console.log("fetchTransactions poll");
     const res = await axios({
       url: '/get_transactions',
       method: 'post',
@@ -37,6 +41,10 @@ class Home extends Component {
     });
 
     const transactions = res.data.transactions;
+
+    // Check if our app server has received transactions for the linked item.
+    // It usually takes 30-240 seconds for the first transaction pull to complete
+    // https://plaid.com/docs/quickstart/#pulling-transaction-data
     if (transactions.length > 0) {
       console.log("fetchTransactions end poll");
       clearInterval(this.fetchTransactionsInterval);
@@ -55,17 +63,23 @@ class Home extends Component {
       data: {},
     });
 
-    const { item_linked_state } = res.data;
+    const { item } = res.data;
 
-    if (item_linked_state > 0) {
-      console.log("getItemLinkedState", item_linked_state)
-      // Logged in user has already linked an item
+    if (item.length > 0) {
+      const { 
+        mask,
+        account_name,
+      } = item[0];
+
+      // Logged in user has already linked an Item
       this.setState({
-        appState: AppState.ITEM_LINKED
+        appState: AppState.ITEM_LINKED,
+        mask,
+        account_name,
       });
 
-      // Since the user has already linked an item, we can now fetch
-      // transactions for that item
+      // Since the user has already linked an Item, we can now fetch
+      // transactions for that Item from our database.
       this.fetchTransactions();
     }
   }
@@ -102,7 +116,11 @@ class Home extends Component {
       <div>
           <div className="row">
             <div className="four columns">
-              <Sidebar appState={this.state.appState} />
+              <Sidebar 
+                appState={this.state.appState} 
+                account_name={this.state.account_name}
+                mask={this.state.mask}
+              />
             </div>
             <div className="eight columns">
               <div className="container">

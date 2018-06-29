@@ -27,8 +27,10 @@ class Link extends Component {
         metadata,
       }
     });
+    const account_name = metadata.account.name;
+    const mask = metadata.account.mask;
 
-    this.initializeBankAccount();
+    this.initializeBankAccount(account_name, mask);
   }
 
   async handleOnEvent(eventName, metadata) {
@@ -51,7 +53,7 @@ class Link extends Component {
         env="sandbox"
         institution={null}
         publicKey="c53a213ab2d73e2c0376babf83bd3b"
-        product={['transactions']}
+        product={['transactions', 'auth']}
         apiVersion='v2'
         webhook="http://1f5643ee.ngrok.io/webhook"
         onEvent={this.handleOnEvent}

@@ -50,9 +50,9 @@ const plaidClient = initPlaidClient();
  * his/her bank account credentials.
  */
 app.post('/get_item_linked_state', async (req, res) => {
-  const item_linked_state = await is_item_linked();
+  const item = await is_item_linked();
   res.send({
-    item_linked_state,
+    item,
   })
 });
 
@@ -115,30 +115,57 @@ app.post('/webhook', async (req, res) => {
 app.post('/exchange_token', async (req, res) => {
 
   const PUBLIC_TOKEN = req.body.public_token;
+  const METADATA = req.body.metadata;
 
   plaidClient.exchangePublicToken(
-    PUBLIC_TOKEN,
-    async (error, tokenResponse) => {
-      if (error != null) {
-        const msg = 'Could not exchange public_token!';
-        console.log(msg, error);
-        return res.json({error: msg});
-      }
+    PUBLIC_TOKEN
+  ).then( async (tokenResponse) => {
+    
+    const { access_token } = tokenResponse;
+    const { item_id } = tokenResponse;
+    const { account_id } = METADATA;
+    const mask = METADATA.account.mask;
+    const account_name = METADATA.account.name;
 
-      const { access_token } = tokenResponse;
-      const { item_id } = tokenResponse;
-      console.log('Access Token:' , access_token);
-      console.log('Item ID:', item_id);
+    // It is recommended to make an Auth call here as soon as you get 
+    // the Item's access_token. 
+    const options = {
+      account_ids : [account_id],
+    }
+
+    plaidClient.getAuth(
+      access_token,
+      options,
+    ).then( async (authResponse) => {
+      
+      const accounts_data = authResponse.numbers[0];
+      const routing_number = accounts_data.routing;
+      const account_number = accounts_data.account;
 
       const user = {
         access_token,
         item_id,
         transactions: [],
+        account_id,
+        routing_number,
+        account_number,
+        mask,
+        account_name,
       }
+
       await create_user(user);
 
       res.send({'error': false});
+    }).catch( error => {
+      const msg = 'Could not get Auth data!';
+      console.log(msg, error);
+      return res.json({error: msg});
+    });
 
+  }).catch( error => {
+    const msg = 'Could not exchange public_token!';
+    console.log(msg, error);
+    return res.json({error: msg});
   });
 });
 

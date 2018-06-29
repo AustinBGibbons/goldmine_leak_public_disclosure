@@ -8,7 +8,6 @@ body {
   height: 100%!important;
 }
 
-<<<<<<< HEAD
 .dashboard-link {
   float: right,
 }
@@ -31,7 +30,6 @@ li a {
   text-decoration: none;
   float: right;
 }
-=======
 .sidebar {
   background-color: #174c78;
   display: flex;
@@ -66,4 +64,3 @@ li a {
 .container {
   padding: 20px;
 }
->>>>>>> d4e2ee4c7476b6af417408ded97081017a9f550b
