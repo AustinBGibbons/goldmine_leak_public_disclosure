@@ -14,6 +14,8 @@ Save environment variables in .env file (we use the dotenv module for this proje
 - `PLAID_CLIENT_ID` - Plaid client id.
 - `PLAID_SECRET` - Plaid secret.
 - `PLAID_PUBLIC_KEY` - Plaid public key.
+- `PLAID_ENV` - Plaid environment for Link initialization.
+- `PORT` - 8000
 - `TRANSACTION_WEBHOOK_URL` - Your Webhook URL when initializing Link for "Transactions"
 
 ```
