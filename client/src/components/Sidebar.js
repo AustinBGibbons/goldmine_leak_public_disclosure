@@ -92,9 +92,9 @@ TRANSACTION_WEBHOOK_URL=<your webhook url>`
             <p>Account Not Supported for Auth!</p>
             <p className="big-emoji">😱</p>
             <p>
-              Woo -- you're almost done! You're now able to track a user's purchases of 
+              Wait! You're almost done, but there's one final step. You're now able to track a user's purchases of 
               Reddit Gold on their AmEx card. However, in order for you to purchase real gold 
-              on behalf of your user, the user will still need to link a funding source. Plaid's Auth product makes 
+              on the user's behalf, the user will still need to link a funding source. Plaid's Auth product makes 
               it simple to support ACH payments, but these payments can only be made with checking or savings accounts. If a 
               user (as in this case) has only linked a credit card account for tracking transactions, you can 
               initialize Link with "Auth" instead of "Transactions" and have your user
