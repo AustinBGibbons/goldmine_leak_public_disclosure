@@ -19,7 +19,6 @@ const User = mongoose.model('User', userSchema);
 const create_user = async user => {
   let user_id = 1;
   const num_items = await is_item_linked(user_id);
-  console.log("num items is ", num_items);
   if (num_items.length > 0) {
     user_id = 2;
   }
@@ -77,17 +76,8 @@ const save_transactions = async (ACCESS_TOKEN, transactions) => {
   return User.findOneAndUpdate(query, update);
 }
 
-const save_auth = async (ACCESS_TOKEN, auth_info) => {
-  const query = { access_token: ACCESS_TOKEN };
-  const update = {$set: {
-    transactions: transactions
-  }};
-
-}
-
-const delete_user = async user_id => {
-  // Ignore user_id, and use hard coded
-  return User.remove({'user_id': 1}).exec();
+const delete_user = () => {
+  return User.remove({}).exec();
 }
 
 module.exports = {
@@ -96,6 +86,5 @@ module.exports = {
   retrieve_transactions,
   retrieve_access_token,
   save_transactions,
-  save_auth,
   delete_user,
 }

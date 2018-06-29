@@ -37,19 +37,17 @@ class Home extends Component {
       data: {},
     });
 
-    const { item } = res.data;
+    const { item, webhook, public_key } = res.data;
+
+    this.setState({
+      webhook,
+      public_key
+    })
 
     if (item.length > 0) {
-      const {
-        mask,
-        account_name,
-      } = item[0];
-
-      // Logged in user has already linked an Item
+      // Logged in user has already has an access_token stored
       this.setState({
-        appState: AppState.ITEM_LINKED,
-        mask,
-        account_name,
+        appState: AppState.PUBLIC_TOKEN_EXCHANGED,
       });
 
       // Since the user has already linked an Item, we can now fetch
@@ -62,9 +60,22 @@ class Home extends Component {
     }
   }
 
-  initializeBankAccount() {
+  async initializeBankAccount(public_token, metadata) {
     this.setState({
-      appState: AppState.ITEM_LINKED,
+      appState: AppState.PUBLIC_TOKEN_EXCHANGE_PENDING,
+    });
+
+    await axios({
+      url: '/exchange_token',
+      method: 'post',
+      data: {
+        public_token,
+        metadata,
+      }
+    });
+
+    this.setState({
+      appState: AppState.PUBLIC_TOKEN_EXCHANGED,
     });
 
     // Start polling for transactions. We do this because the server is currently
@@ -136,7 +147,11 @@ class Home extends Component {
       case AppState.ITEM_NOT_LINKED:
         return (
           <div>
-            <Link initializeBankAccount={this.initializeBankAccount.bind(this)} />
+            <Link
+              initializeBankAccount={this.initializeBankAccount.bind(this)}
+              webhook={this.state.webhook}
+              public_key={this.state.public_key}
+            />
           </div>
         );
       case AppState.ITEM_LINKED:
@@ -166,7 +181,11 @@ class Home extends Component {
               <strong>Auth State: </strong>
               <text style={{color:'gold'}}>{this.state.authState}</text>
             </p>
-            <AuthLink getAuth={this.getAuth.bind(this)} />
+            <AuthLink 
+              getAuth={this.getAuth.bind(this)} 
+              webhook={this.state.webhook}
+              public_key={this.state.public_key}
+            />
             <TransactionList transactions={this.state.transactions}/>
           </div>
         );

@@ -29,7 +29,7 @@ class AuthLink extends Component {
     });
 
     // We're setting user_id to 2 becuase that's the id that corresponds
-    // to the account in our database that's enabled for Auth.
+    // to the Item in our database that's enabled for Auth.
     const user_id = 2;
     this.getAuth(user_id);
   }
@@ -53,10 +53,10 @@ class AuthLink extends Component {
         clientName="Boilerplate"
         env="sandbox"
         institution={null}
-        publicKey="c53a213ab2d73e2c0376babf83bd3b"
+        publicKey={this.props.public_key}
         product={['auth']}
         apiVersion='v2'
-        webhook="http://1f5643ee.ngrok.io/webhook"
+        webhook={this.props.webhook}
         onEvent={this.handleOnEvent}
         onExit={this.handleOnExit}
         onLoad={this.handleOnLoad}

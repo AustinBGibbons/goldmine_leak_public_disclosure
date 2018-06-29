@@ -34,14 +34,16 @@ class Sidebar extends Component {
         return (
           <div>
             <h3>Step 1</h3>
-            <p>Create a .env file with your API keys</p>
+            <p>Create a .env file with your API keys and environment configs</p>
             <pre>
 <code className="language-bash">
-{`PORT=8000
+{`PLAID_ENV=sandbox
+PORT=8000
 PLAID_CLIENT_ID=<your client id>
 PLAID_SECRET=<your secret>
 PLAID_PUBLIC_KEY=<your public key>
-PLAID_ENV=sandbox`}
+TRANSACTION_WEBHOOK_URL=<your webhook url>`
+}
 </code>
             </pre>
             <a className="dashboard-link"
@@ -78,7 +80,7 @@ PLAID_ENV=sandbox`}
             <p>Now, let's try authenticating an account using Plaid's Auth product.</p>
             <a className="button button-primary" onClick={this.handleGetAuth.bind(this)}>Authenticate Account</a>
           </div>
-        )
+        );
       case AppState.AUTH_ERROR:
         return (
           <div>
@@ -94,9 +96,8 @@ PLAID_ENV=sandbox`}
               Financial Institutions show up when you initialize Link with "Auth"
               instead of "Transactions".
             </p>
-
           </div>
-        )
+        );
       case AppState.AUTH_COMPLETED:
         return (
           <div>
@@ -105,10 +106,9 @@ PLAID_ENV=sandbox`}
             <p>You've completed all the steps for a basic Plaid app, congrats!</p>
             <p className="big-emoji">🎉</p>
             <p>Now, go build something even better!</p>
-
             <a className="button button-primary" onClick={this.handleReset.bind(this)}>Start Over</a>
           </div>
-        )
+        );
     }
   }
 

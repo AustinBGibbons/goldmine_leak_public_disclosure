@@ -10,7 +10,6 @@ const {
   retrieve_transactions,
   retrieve_access_token,
   save_transactions,
-  save_auth,
   delete_user
 } = require('../database/index');
 
@@ -22,6 +21,12 @@ const port = process.env.PORT || 8000;
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client/dist'));
 
+const PLAID_ENV = process.env.PLAID_ENV || 'sandbox';
+const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
+const PLAID_SECRET = process.env.PLAID_SECRET;
+const PLAID_PUBLIC_KEY = process.env.PLAID_PUBLIC_KEY;
+const TRANSACTION_WEBHOOK_URL = process.env.TRANSACTION_WEBHOOK_URL
+
 /**
  * Initializes a new Plaid Client using your public_key,
  * client_id, and secret_key. These are all found on your
@@ -29,10 +34,7 @@ app.use(express.static(__dirname + '/../client/dist'));
  * @returns initialized plaid client
  */
 const initPlaidClient = () => {
-  const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
-  const PLAID_SECRET = process.env.PLAID_SECRET;
-  const PLAID_PUBLIC_KEY = process.env.PLAID_PUBLIC_KEY;
-  const PLAID_ENV = process.env.PLAID_ENV || 'sandbox';
+
 
   const plaidClient = new plaid.Client(
     PLAID_CLIENT_ID,
@@ -54,6 +56,8 @@ app.post('/get_item_linked_state', async (req, res) => {
   const item = await is_item_linked();
   res.send({
     item,
+    webhook: TRANSACTION_WEBHOOK_URL,
+    public_key: PLAID_PUBLIC_KEY,
   })
 });
 
@@ -108,7 +112,6 @@ app.post('/webhook', async (req, res) => {
   }).catch( (error) => {
     console.log(error);
   });
-
 });
 
 /**
@@ -116,21 +119,15 @@ app.post('/webhook', async (req, res) => {
  */
 app.post('/get_auth', async (req, res) => {
   const { user_id } = req.body;
-  console.log("user id is ", user_id);
-  
   const item = await is_item_linked(user_id);
   const { access_token } = item[0];
 
   plaidClient.getAuth(
     access_token,
   ).then( async (authResponse) => {
-
-    const accounts_data = authResponse.numbers;
-    console.log("Accounts Data are", accounts_data)
     res.json({
       error: false,
     });
-    
   }).catch( error => {
     const msg = 'Could not get Auth data!';
     console.log(msg, error);
@@ -139,8 +136,6 @@ app.post('/get_auth', async (req, res) => {
       message: msg
     });
   });
-
-
 });
 
 /**
@@ -161,15 +156,8 @@ app.post('/exchange_token', async (req, res) => {
       access_token,
       item_id,
       transactions: [],
-      // account_id: null,
-      // routing_number: null,
-      // account_number: null,
-      // mask: null,
-      // account_name: null,
     }
-
     await create_user(user);
-
     res.send({'error': false});
 
   }).catch( error => {
