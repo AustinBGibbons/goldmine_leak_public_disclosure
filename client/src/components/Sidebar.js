@@ -9,7 +9,10 @@ Your app would not need to replicate any of this code, so you can safely ignore 
 class Sidebar extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      account_name: this.props.account_name,
+      mask: this.props.mask,
+    };
   }
 
   handleReset() {
@@ -63,6 +66,10 @@ PLAID_ENV=sandbox`}
             <p>Received transactions!</p>
             <p>You've completed all the steps for a basic Plaid app, congrats!</p>
             <p className="big-emoji">🎉</p>
+            <p>You are now seeing transactions for</p>
+            <p>Account Name: {this.props.account_name}</p>
+            <p>Mask: {this.props.mask}</p>
+
             <a className="button button-primary" onClick={this.handleReset.bind(this)}>Start Over</a>
           </div>
         )

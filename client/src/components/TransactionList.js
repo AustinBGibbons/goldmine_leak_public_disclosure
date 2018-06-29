@@ -15,6 +15,7 @@ class TransactionList extends Component {
         <table className="u-full-width">
           <thead>
             <tr>
+              <th>Date</th>
               <th>Transaction</th>
               <th>Amount</th>
             </tr>

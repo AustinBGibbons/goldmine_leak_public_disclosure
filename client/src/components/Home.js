@@ -11,6 +11,8 @@ class Home extends Component {
     super(props);
     this.state = {
       appState: AppState.INIT,
+      account_name: null,
+      mask: null,
       transactions: null,
     };
     this.initializeBankAccount = this.initializeBankAccount.bind(this);
@@ -28,9 +30,11 @@ class Home extends Component {
     });
   }
 
-  initializeBankAccount() {
+  initializeBankAccount(account_name, mask) {
     this.setState({
       appState: AppState.ITEM_LINKED,
+      account_name,
+      mask,
     });
 
     // Start polling for transactions. We do this because the server is currently
@@ -71,17 +75,23 @@ class Home extends Component {
       data: {},
     });
 
-    const { item_linked_state } = res.data;
+    const { item } = res.data;
 
-    if (item_linked_state > 0) {
-      console.log("getItemLinkedState", item_linked_state)
-      // Logged in user has already linked an item
+    if (item.length > 0) {
+      const {
+        mask,
+        account_name,
+      } = item[0];
+
+      // Logged in user has already linked an Item
       this.setState({
-        appState: AppState.ITEM_LINKED
+        appState: AppState.ITEM_LINKED,
+        mask,
+        account_name,
       });
 
-      // Since the user has already linked an item, we can now fetch
-      // transactions for that item
+      // Since the user has already linked an Item, we can now fetch
+      // transactions for that Item from our database.
       this.fetchTransactions();
     }
   }
@@ -118,7 +128,12 @@ class Home extends Component {
   render() {
     return(
         <div className="row">
-          <Sidebar appState={this.state.appState} reset={this.reset.bind(this)}/>
+          <Sidebar
+                appState={this.state.appState}
+                account_name={this.state.account_name}
+                mask={this.state.mask}
+                reset={this.reset.bind(this)}
+          />
           <div className="app">
             <nav>
               <div className="logo">
