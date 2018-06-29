@@ -1,6 +1,6 @@
 # Goldmine
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/austinbgibbons/goldmine_leak_public_disclosure.git.git)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/austinbgibbons/goldmine_leak_public_disclosure.git)
 
 This example app uses the `Transactions` and `Auth` products. 
 

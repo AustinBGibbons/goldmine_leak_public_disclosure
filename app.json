@@ -1,7 +1,7 @@
 {
   "name": "Plaid Starter App",
   "description": "Boilerplate Plaid App using Node.js",
-  "repository": "https://github.com/austinbgibbons/goldmine_leak_public_disclosure.git.git",
+  "repository": "https://github.com/austinbgibbons/goldmine_leak_public_disclosure.git",
   "logo": "https://plaid.com/images/contact/press/logo-vertical-white.png",
   "keywords": ["node", "express", "plaid"],
   "addons": [
