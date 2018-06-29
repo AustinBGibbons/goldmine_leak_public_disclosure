@@ -92,7 +92,7 @@ TRANSACTION_WEBHOOK_URL=<your webhook url>`
             <p>Account Not Supported for Auth!</p>
             <p className="big-emoji">😱</p>
             <p>
-              Auth is only supported for depository and savings accounts. Therefore,
+              Plaid's Auth product, which enables ACH payments, is only supported for depository and savings accounts. Therefore,
               you won't be able to call the /auth/get endpoint for Items from 
               certain Financial Insitutions such as American Express. However, you can 
               initialize Link with "Auth" instead of "Transactions" and have your user
