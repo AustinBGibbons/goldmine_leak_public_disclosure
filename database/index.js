@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 
-mongoose.connect('mongodb://localhost/boilerplate');
+dotenv.config();
+
+console.log("mongo url", process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI);
 
 const db = mongoose.connection;
 
