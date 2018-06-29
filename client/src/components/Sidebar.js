@@ -30,14 +30,16 @@ class Sidebar extends Component {
         return (
           <div>
             <h3>Step 1</h3>
-            <p>Create a .env file with your API keys</p>
+            <p>Create a .env file with your API keys and environment configs</p>
             <pre>
 <code className="language-bash">
-{`PORT=8000
+{`PLAID_ENV=sandbox
+PORT=8000
 PLAID_CLIENT_ID=<your client id>
 PLAID_SECRET=<your secret>
 PLAID_PUBLIC_KEY=<your public key>
-PLAID_ENV=sandbox`}
+TRANSACTION_WEBHOOK_URL=<your webhook url>`
+}
 </code>
             </pre>
             <a className="dashboard-link"
