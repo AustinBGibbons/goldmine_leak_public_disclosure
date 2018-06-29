@@ -79,6 +79,7 @@ app.post('/webhook', async (req, res) => {
   const { webhook_code } = req.body;
 
   const data = await retrieve_access_token(item_id);
+  console.log("webhook callback, access_token = ", data)
   const { access_token } = data[0];
 
   const now = moment();

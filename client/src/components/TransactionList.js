@@ -12,7 +12,6 @@ class TransactionList extends Component {
   render() {
     return(
       <div className="transaction-list">
-        <h5>Your Transactions:</h5>
         <table className="u-full-width">
           <thead>
             <tr>

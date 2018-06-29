@@ -16,6 +16,18 @@ class Home extends Component {
     this.initializeBankAccount = this.initializeBankAccount.bind(this);
   }
 
+  async reset() {
+    const res = await axios({
+      url: '/delete_user',
+      method: 'post',
+      data: {},
+    });
+
+    this.setState({
+      appState: AppState.INIT,
+    });
+  }
+
   initializeBankAccount() {
     this.setState({
       appState: AppState.ITEM_LINKED,
@@ -82,7 +94,9 @@ class Home extends Component {
     switch(appState) {
       case AppState.INIT:
         return (
+          <div>
             <Link initializeBankAccount={this.initializeBankAccount} />
+          </div>
         );
       case AppState.ITEM_LINKED:
         return (
@@ -103,18 +117,19 @@ class Home extends Component {
 
   render() {
     return(
-      <div>
-          <div className="row">
-            <div className="four columns">
-              <Sidebar appState={this.state.appState} />
-            </div>
-            <div className="eight columns">
-              <div className="container">
-                {this.renderBody(this.state.appState)}
+        <div className="row">
+          <Sidebar appState={this.state.appState} reset={this.reset.bind(this)}/>
+          <div className="app">
+            <nav>
+              <div className="logo">
+                💰 Goldmine 💰
               </div>
+            </nav>
+            <div className="container body">
+              {this.renderBody(this.state.appState)}
             </div>
           </div>
-      </div>
+        </div>
     );
   };
 };

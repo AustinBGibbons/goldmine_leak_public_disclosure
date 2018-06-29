@@ -2,10 +2,19 @@ import React, { Component } from 'react';
 import Prism from 'prismjs';
 import { AppState } from '../common';
 
+/*
+This component helps visualize the current state of your Plaid app.
+Your app would not need to replicate any of this code, so you can safely ignore it.
+*/
 class Sidebar extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  handleReset() {
+    console.log("start over clicked");
+    this.props.reset();
   }
 
   renderAppState(appState) {
@@ -13,21 +22,16 @@ class Sidebar extends Component {
       case AppState.INIT:
         return (
           <div>
-            <p className="welcome-msg">
-              Welcome to the Plaid Boilerplate Tutorial!
-            </p>
-            <p>
-              Step 1: Create a .env file with your API keys:
-            </p>
+            <h3>Step 1</h3>
+            <p>Create a .env file with your API keys</p>
             <pre>
-              <code className="language-bash">
+<code className="language-bash">
 {`PORT=8000
 PLAID_CLIENT_ID=<your client id>
 PLAID_SECRET=<your secret>
 PLAID_PUBLIC_KEY=<your public key>
-PLAID_ENV=sandbox
-`}
-              </code>
+PLAID_ENV=sandbox`}
+</code>
             </pre>
             <a className="dashboard-link"
                href="https://dashboard.plaid.com/account/keys"
@@ -39,19 +43,27 @@ PLAID_ENV=sandbox
       case AppState.ITEM_LINKED:
         return (
           <div>
+            <h3>Step 2</h3>
             <p>Item Linked! Calling app server to exchange public_token for access_token...</p>
+            <p className="big-emoji">☁️</p>
           </div>
         );
       case AppState.PUBLIC_TOKEN_EXCHANGED:
         return (
           <div>
+            <h3>Step 3</h3>
             <p>Server has access_token! App server is waiting for transactions from Plaid...</p>
+            <p className="big-emoji">⏳</p>
           </div>
         );
       case AppState.TRANSACTIONS_RECEIVED:
         return (
           <div>
-            <p>Received transactions! See below</p>
+            <h3>Step 4</h3>
+            <p>Received transactions!</p>
+            <p>You've completed all the steps for a basic Plaid app, congrats!</p>
+            <p className="big-emoji">🎉</p>
+            <a className="button button-primary" onClick={this.handleReset.bind(this)}>Start Over</a>
           </div>
         )
     }
@@ -59,16 +71,9 @@ PLAID_ENV=sandbox
 
   render() {
     return (
-      <div>
-        <div className="sidebar">
-          <div className="logo">
-            <a href="#">
-              Boilerplate App 💸⏱
-            </a>
-          </div>
-          <div className="app-state">
-            {this.renderAppState(this.props.appState)}
-          </div>
+      <div className="sidebar">
+        <div className="app-state">
+          {this.renderAppState(this.props.appState)}
         </div>
       </div>
     );
