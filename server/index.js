@@ -35,7 +35,6 @@ const TRANSACTION_WEBHOOK_URL = process.env.TRANSACTION_WEBHOOK_URL
  */
 const initPlaidClient = () => {
 
-
   const plaidClient = new plaid.Client(
     PLAID_CLIENT_ID,
     PLAID_SECRET,
