@@ -66,6 +66,7 @@ app.post('/get_item_linked_state', async (req, res) => {
  */
 app.post('/get_transactions', async (req, res) => {
   const user_data = await retrieve_transactions();
+  console.log("user_data", user_data);
   const { transactions } = user_data[0];
   res.send({
     transactions
@@ -130,7 +131,7 @@ app.post('/get_auth', async (req, res) => {
   }).catch( error => {
     const msg = 'Could not get Auth data!';
     console.log(msg, error);
-    res.json({ 
+    res.json({
       error: true,
       message: msg
     });

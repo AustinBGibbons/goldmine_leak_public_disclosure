@@ -17,6 +17,10 @@ class Home extends Component {
     };
   }
 
+  componentDidMount() {
+    this.getItemLinkedState();
+  }
+
   async reset() {
     const res = await axios({
       url: '/delete_user',
@@ -110,7 +114,7 @@ class Home extends Component {
   }
 
   /**
-   * 
+   *
    * @param {Int} user_id optional
    */
   async getAuth(user_id) {
@@ -132,10 +136,6 @@ class Home extends Component {
         appState: AppState.AUTH_ERROR,
       });
     }
-  }
-
-  componentDidMount() {
-    this.getItemLinkedState();
   }
 
   renderBody(appState) {
@@ -181,8 +181,8 @@ class Home extends Component {
               <strong>Auth State: </strong>
               <text style={{color:'gold'}}>{this.state.authState}</text>
             </p>
-            <AuthLink 
-              getAuth={this.getAuth.bind(this)} 
+            <AuthLink
+              getAuth={this.getAuth.bind(this)}
               webhook={this.state.webhook}
               public_key={this.state.public_key}
             />

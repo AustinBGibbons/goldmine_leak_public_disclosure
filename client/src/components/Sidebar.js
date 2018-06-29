@@ -59,7 +59,7 @@ TRANSACTION_WEBHOOK_URL=<your webhook url>`
             <h3>Step 2</h3>
             <p>Item Linked! Calling app server to exchange public_token for access_token...</p>
             <p className="big-emoji">☁️</p>
-            <a className="button button-primary" onClick={this.handleReset.bind(this)}>Start Over</a>
+            <a className="button button-secondary" onClick={this.handleReset.bind(this)}>Start Over</a>
           </div>
         );
       case AppState.PUBLIC_TOKEN_EXCHANGED:
@@ -68,7 +68,7 @@ TRANSACTION_WEBHOOK_URL=<your webhook url>`
             <h3>Step 3</h3>
             <p>Server has access_token! App server is waiting for transactions from Plaid...</p>
             <p className="big-emoji">⏳</p>
-            <a className="button button-primary" onClick={this.handleReset.bind(this)}>Start Over</a>
+            <a className="button button-secondary" onClick={this.handleReset.bind(this)}>Start Over</a>
           </div>
         );
       case AppState.TRANSACTIONS_RECEIVED:
@@ -82,7 +82,7 @@ TRANSACTION_WEBHOOK_URL=<your webhook url>`
             <p>Now, let's try authenticating an account using Plaid's Auth product.</p>
             <a className="button button-primary" onClick={this.handleGetAuth.bind(this)}>Authenticate Account</a>
             <br/>
-            <a className="button button-primary" onClick={this.handleReset.bind(this)}>Start Over</a>
+            <a className="button button-secondary" onClick={this.handleReset.bind(this)}>Start Over</a>
           </div>
         );
       case AppState.AUTH_ERROR:
@@ -92,17 +92,17 @@ TRANSACTION_WEBHOOK_URL=<your webhook url>`
             <p>Account Not Supported for Auth!</p>
             <p className="big-emoji">😱</p>
             <p>
-              Wait! You're almost done, but there's one final step. You're now able to track a user's purchases of 
-              Reddit Gold on their AmEx card. However, in order for you to purchase real gold 
-              on the user's behalf, the user will still need to link a funding source. Plaid's Auth product makes 
-              it simple to support ACH payments, but these payments can only be made with checking or savings accounts. If a 
-              user (as in this case) has only linked a credit card account for tracking transactions, you can 
+              Wait! You're almost done, but there's one final step. You're now able to track a user's purchases of
+              Reddit Gold on their AmEx card. However, in order for you to purchase real gold
+              on the user's behalf, the user will still need to link a funding source. Plaid's Auth product makes
+              it simple to support ACH payments, but these payments can only be made with checking or savings accounts. If a
+              user (as in this case) has only linked a credit card account for tracking transactions, you can
               initialize Link with "Auth" instead of "Transactions" and have your user
               re-Link an Item with a different account as that funding source. Notice how only certain
               Financial Institutions show up when you initialize Link with "Auth"
               instead of "Transactions".
             </p>
-            <a className="button button-primary" onClick={this.handleReset.bind(this)}>Start Over</a>
+            <a className="button button-secondary" onClick={this.handleReset.bind(this)}>Start Over</a>
           </div>
         );
       case AppState.AUTH_COMPLETED:
