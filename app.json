@@ -9,5 +9,27 @@
       "plan": "mongolab:sandbox",
       "as": "MONGO"
     }
-  ]
+  ],
+  "env": {
+    "PLAID_ENV": {
+      "description": "Plaid environment to test against: sandbox, development, production",
+      "value": "sandbox"
+    },
+    "PLAID_CLIENT_ID": {
+      "description": "Your Plaid client_id",
+      "value": "todo"
+    },
+    "PLAID_SECRET": {
+      "description": "Your Plaid secret for the environment you are testing against",
+      "value": "todo"
+    },
+    "PLAID_PUBLIC_KEY": {
+      "description": "Your Plaid public_key",
+      "value": "todo"
+    },
+    "TRANSACTION_WEBHOOK_URL": {
+      "description": "Webhook url for transaction updates from Plaid",
+      "value": "/webhook"
+    }
+  }
 }
