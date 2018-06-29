@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PlaidLink from 'react-plaid-link';
 import axios from 'axios';
 
-class Link extends Component {
+class AuthLink extends Component {
   constructor(props) {
     super(props);
     this.state = {};
 
     // These functions are run after a successful Item Creation
     // through Link.
-    this.initializeBankAccount = this.props.initializeBankAccount;
+    this.getAuth = this.props.getAuth;
 
     // These functions are Link callbacks.
     this.handleOnExit = this.handleOnExit.bind(this);
@@ -19,9 +19,19 @@ class Link extends Component {
   }
 
   async handleOnSuccess(public_token, metadata) {
-    console.log("link onSuccess", metadata);
+    await axios({
+      url: '/exchange_token',
+      method: 'post',
+      data: {
+        public_token,
+        metadata,
+      }
+    });
 
-    this.initializeBankAccount(public_token, metadata);
+    // We're setting user_id to 2 becuase that's the id that corresponds
+    // to the Item in our database that's enabled for Auth.
+    const user_id = 2;
+    this.getAuth(user_id);
   }
 
   async handleOnEvent(eventName, metadata) {
@@ -44,7 +54,7 @@ class Link extends Component {
         env="sandbox"
         institution={null}
         publicKey={this.props.public_key}
-        product={['transactions']}
+        product={['auth']}
         apiVersion='v2'
         webhook={this.props.webhook}
         onEvent={this.handleOnEvent}
@@ -53,10 +63,10 @@ class Link extends Component {
         onSuccess={this.handleOnSuccess}
         className="link-button"
       >
-        Connect your bank account using Plaid Link!
+        Launch Auth-initialized Plaid Link!
       </PlaidLink>
     );
   }
 }
 
-export default Link;
+export default AuthLink;

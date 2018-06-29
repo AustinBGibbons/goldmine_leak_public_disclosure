@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { AppState } from '../common';
 import Sidebar from './Sidebar';
+import AuthLink from'./AuthLink';
 import Link from './Link';
 import TransactionList from './TransactionList';
 
@@ -11,11 +12,9 @@ class Home extends Component {
     super(props);
     this.state = {
       appState: AppState.LOADING,
-      account_name: null,
-      mask: null,
+      authState: "Pending...",
       transactions: null,
     };
-    this.initializeBankAccount = this.initializeBankAccount.bind(this);
   }
 
   async reset() {
@@ -27,6 +26,7 @@ class Home extends Component {
 
     this.setState({
       appState: AppState.ITEM_NOT_LINKED,
+      authState: "Pending..."
     });
   }
 
@@ -45,16 +45,9 @@ class Home extends Component {
     })
 
     if (item.length > 0) {
-      const {
-        mask,
-        account_name,
-      } = item[0];
-
       // Logged in user has already has an access_token stored
       this.setState({
         appState: AppState.PUBLIC_TOKEN_EXCHANGED,
-        mask,
-        account_name,
       });
 
       // Since the user has already linked an Item, we can now fetch
@@ -68,13 +61,8 @@ class Home extends Component {
   }
 
   async initializeBankAccount(public_token, metadata) {
-    const account_name = metadata.account.name;
-    const mask = metadata.account.mask;
-
     this.setState({
       appState: AppState.PUBLIC_TOKEN_EXCHANGE_PENDING,
-      account_name,
-      mask,
     });
 
     await axios({
@@ -121,6 +109,31 @@ class Home extends Component {
     }
   }
 
+  /**
+   * 
+   * @param {Int} user_id optional
+   */
+  async getAuth(user_id) {
+    const res = await axios({
+      url: '/get_auth',
+      method: 'post',
+      data: {
+        user_id: user_id || 1,
+      },
+    });
+
+    if (!res.data.error) {
+      this.setState({
+        appState: AppState.AUTH_COMPLETED,
+        authState: "Authenticated!"
+      });
+    } else {
+      this.setState({
+        appState: AppState.AUTH_ERROR,
+      });
+    }
+  }
+
   componentDidMount() {
     this.getItemLinkedState();
   }
@@ -135,7 +148,7 @@ class Home extends Component {
         return (
           <div>
             <Link
-              initializeBankAccount={this.initializeBankAccount}
+              initializeBankAccount={this.initializeBankAccount.bind(this)}
               webhook={this.state.webhook}
               public_key={this.state.public_key}
             />
@@ -153,8 +166,39 @@ class Home extends Component {
         );
       case AppState.TRANSACTIONS_RECEIVED:
         return (
-          <TransactionList transactions={this.state.transactions}/>
-        )
+          <div>
+            <p>
+              <strong>Auth State: </strong>
+              <text style={{color:'gold'}}>{this.state.authState}</text>
+            </p>
+            <TransactionList transactions={this.state.transactions}/>
+          </div>
+        );
+      case AppState.AUTH_ERROR:
+        return(
+          <div>
+            <p>
+              <strong>Auth State: </strong>
+              <text style={{color:'gold'}}>{this.state.authState}</text>
+            </p>
+            <AuthLink 
+              getAuth={this.getAuth.bind(this)} 
+              webhook={this.state.webhook}
+              public_key={this.state.public_key}
+            />
+            <TransactionList transactions={this.state.transactions}/>
+          </div>
+        );
+      case AppState.AUTH_COMPLETED:
+        return(
+          <div>
+            <p>
+              <strong>Auth State: </strong>
+              <text style={{color:'green'}}>{this.state.authState}</text>
+            </p>
+            <TransactionList transactions={this.state.transactions}/>
+          </div>
+        );
     }
   }
 
@@ -163,8 +207,7 @@ class Home extends Component {
         <div className="row">
           <Sidebar
                 appState={this.state.appState}
-                account_name={this.state.account_name}
-                mask={this.state.mask}
+                getAuth={this.getAuth.bind(this)}
                 reset={this.reset.bind(this)}
           />
           <div className="app">
