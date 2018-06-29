@@ -17,7 +17,7 @@ Save environment variables in .env file (we use the dotenv module for this proje
 - `TRANSACTION_WEBHOOK_URL` - Your Webhook URL when initializing Link for "Transactions"
 
 ```
-cd ~/plaid/boilerplate
+cd ~/plaid/goldmine
 yarn install
 ```
 
