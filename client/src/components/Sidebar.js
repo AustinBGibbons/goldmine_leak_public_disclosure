@@ -22,7 +22,11 @@ class Sidebar extends Component {
 
   renderAppState(appState) {
     switch(appState) {
-      case AppState.INIT:
+      case AppState.LOADING:
+        return (
+          <h3>Loading...</h3>
+        )
+      case AppState.ITEM_NOT_LINKED:
         return (
           <div>
             <h3>Step 1</h3>

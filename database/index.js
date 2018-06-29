@@ -23,7 +23,7 @@ const create_user = async user => {
     return;
   }
 
-  const { 
+  const {
     access_token,
     item_id,
     transactions,
@@ -51,7 +51,7 @@ const create_user = async user => {
 }
 
 /**
- * For the purposes of this app, we don't want to have more 
+ * For the purposes of this app, we don't want to have more
  * than one end user. This function checks whether a user
  * has already been created or not.
  */
@@ -87,10 +87,8 @@ const save_transactions = async (ACCESS_TOKEN, transactions) => {
 }
 
 const delete_user = async user_id => {
-  return User
-    .findOne({'user_id': user_id})
-    .remove()
-    .exec();
+  // Ignore user_id, and use hard coded
+  return User.remove({'user_id': 1}).exec();
 }
 
 module.exports = {

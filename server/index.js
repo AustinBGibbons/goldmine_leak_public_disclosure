@@ -70,9 +70,9 @@ app.post('/get_transactions', async (req, res) => {
 
 /**
  * Endpoint for receiving webhook requests from Plaid.
- * You can then perform actions accordingly. This app 
+ * You can then perform actions accordingly. This app
  * only handles TRANSACTIONS update webhooks, but the
- * concept is similar for other types of webhook requests. 
+ * concept is similar for other types of webhook requests.
  */
 app.post('/webhook', async (req, res) => {
   const { item_id } = req.body;
@@ -86,7 +86,7 @@ app.post('/webhook', async (req, res) => {
   const end_date = now.format('YYYY-MM-DD');
   let start_date;
 
-  // The following are recommended date ranges when pulling 
+  // The following are recommended date ranges when pulling
   // transactions data for each update type.
   if (webhook_code === 'INITIAL_UPDATE') {
     start_date = now.subtract(30, 'days').format('YYYY-MM-DD');
@@ -117,30 +117,31 @@ app.post('/exchange_token', async (req, res) => {
 
   const PUBLIC_TOKEN = req.body.public_token;
   const METADATA = req.body.metadata;
+  console.log("metadata", METADATA);
 
   plaidClient.exchangePublicToken(
     PUBLIC_TOKEN
   ).then( async (tokenResponse) => {
-    
+
     const { access_token } = tokenResponse;
     const { item_id } = tokenResponse;
     const { account_id } = METADATA;
     const mask = METADATA.account.mask;
     const account_name = METADATA.account.name;
 
-    // It is recommended to make an Auth call here as soon as you get 
+    // It is recommended to make an Auth call here as soon as you get
     // the Item's access_token. For the purposes of this app, we have
     // enabled linking for only one account. This can be done in the
     // Plaid Dashboard in the 'Customize' tab -> 'Select Accounts'.
-    const options = {
+    const options = account_id ? {
       account_ids : [account_id],
-    }
+    } : {};
 
     plaidClient.getAuth(
       access_token,
       options,
     ).then( async (authResponse) => {
-      
+
       const accounts_data = authResponse.numbers[0];
       const routing_number = accounts_data.routing;
       const account_number = accounts_data.account;

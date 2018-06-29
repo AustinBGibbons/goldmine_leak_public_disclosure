@@ -10,7 +10,7 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      appState: AppState.INIT,
+      appState: AppState.LOADING,
       account_name: null,
       mask: null,
       transactions: null,
@@ -26,8 +26,40 @@ class Home extends Component {
     });
 
     this.setState({
-      appState: AppState.INIT,
+      appState: AppState.ITEM_NOT_LINKED,
     });
+  }
+
+  async getItemLinkedState() {
+    const res = await axios({
+      url: '/get_item_linked_state',
+      method: 'post',
+      data: {},
+    });
+
+    const { item } = res.data;
+
+    if (item.length > 0) {
+      const {
+        mask,
+        account_name,
+      } = item[0];
+
+      // Logged in user has already linked an Item
+      this.setState({
+        appState: AppState.ITEM_LINKED,
+        mask,
+        account_name,
+      });
+
+      // Since the user has already linked an Item, we can now fetch
+      // transactions for that Item from our database.
+      this.fetchTransactions();
+    } else {
+      this.setState({
+        appState: AppState.ITEM_NOT_LINKED,
+      })
+    }
   }
 
   initializeBankAccount(account_name, mask) {
@@ -68,41 +100,17 @@ class Home extends Component {
     }
   }
 
-  async getItemLinkedState() {
-    const res = await axios({
-      url: '/get_item_linked_state',
-      method: 'post',
-      data: {},
-    });
-
-    const { item } = res.data;
-
-    if (item.length > 0) {
-      const {
-        mask,
-        account_name,
-      } = item[0];
-
-      // Logged in user has already linked an Item
-      this.setState({
-        appState: AppState.ITEM_LINKED,
-        mask,
-        account_name,
-      });
-
-      // Since the user has already linked an Item, we can now fetch
-      // transactions for that Item from our database.
-      this.fetchTransactions();
-    }
-  }
-
   componentDidMount() {
     this.getItemLinkedState();
   }
 
   renderBody(appState) {
     switch(appState) {
-      case AppState.INIT:
+      case AppState.LOADING:
+        return (
+          <div>Loading...</div>
+        );
+      case AppState.ITEM_NOT_LINKED:
         return (
           <div>
             <Link initializeBankAccount={this.initializeBankAccount} />
