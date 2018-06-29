@@ -62,6 +62,7 @@ class Link extends Component {
         onExit={this.handleOnExit}
         onLoad={this.handleOnLoad}
         onSuccess={this.handleOnSuccess}
+        className="link-button"
       >
         Connect your bank account using Plaid Link!
       </PlaidLink>

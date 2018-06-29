@@ -3,6 +3,13 @@ body {
   font-size: 16px;
 }
 
+/* Link */
+/* Need !important to override built in styles */
+.link-button {
+  padding: 10px 20px!important;
+  line-height: 20px;
+}
+
 /* Goldmine Example App */
 .app {
   flex-grow: 2;
