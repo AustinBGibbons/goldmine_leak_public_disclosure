@@ -92,11 +92,13 @@ TRANSACTION_WEBHOOK_URL=<your webhook url>`
             <p>Account Not Supported for Auth!</p>
             <p className="big-emoji">😱</p>
             <p>
-              Plaid's Auth product, which enables ACH payments, is only supported for depository and savings accounts. Therefore,
-              you won't be able to call the /auth/get endpoint for Items from 
-              certain Financial Insitutions such as American Express. However, you can 
+              Woo -- you're almost done! You're now able to track a user's purchases of 
+              Reddit Gold on their AmEx card. However, in order for you to purchase real gold 
+              on behalf of your user, the user will still need to link a funding source. Plaid's Auth product makes 
+              it simple to support ACH payments, but these payments can only be made with checking or savings accounts. If a 
+              user (as in this case) has only linked a credit card account for tracking transactions, you can 
               initialize Link with "Auth" instead of "Transactions" and have your user
-              re-Link an Item with a different account. Notice how only certain
+              re-Link an Item with a different account as that funding source. Notice how only certain
               Financial Institutions show up when you initialize Link with "Auth"
               instead of "Transactions".
             </p>
