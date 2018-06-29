@@ -3,8 +3,8 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-console.log("mongo url", process.env.MONGODB_URI)
-mongoose.connect(process.env.MONGODB_URI);
+console.log("mongo url", process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI);
 
 const db = mongoose.connection;
 
@@ -46,7 +46,7 @@ const create_user = async user => {
 
 /**
  * Retrieves Item from database.
- * @param {Int} user_id 
+ * @param {Int} user_id
  */
 const is_item_linked = (user_id) => {
   return User.find({'user_id': user_id});
@@ -62,7 +62,7 @@ const retrieve_access_token = (item_id) => {
 
 /**
  * For the purposes of this app, user 1 will be the user
- * that when through Plaid Link with 'Transactions' 
+ * that when through Plaid Link with 'Transactions'
  * initialized.
  */
 const retrieve_transactions = () => {
