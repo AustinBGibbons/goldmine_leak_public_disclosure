@@ -37,7 +37,12 @@ class Home extends Component {
       data: {},
     });
 
-    const { item } = res.data;
+    const { item, webhook, public_key } = res.data;
+
+    this.setState({
+      webhook,
+      public_key
+    })
 
     if (item.length > 0) {
       const {
@@ -45,9 +50,9 @@ class Home extends Component {
         account_name,
       } = item[0];
 
-      // Logged in user has already linked an Item
+      // Logged in user has already has an access_token stored
       this.setState({
-        appState: AppState.ITEM_LINKED,
+        appState: AppState.PUBLIC_TOKEN_EXCHANGED,
         mask,
         account_name,
       });
@@ -62,11 +67,27 @@ class Home extends Component {
     }
   }
 
-  initializeBankAccount(account_name, mask) {
+  async initializeBankAccount(public_token, metadata) {
+    const account_name = metadata.account.name;
+    const mask = metadata.account.mask;
+
     this.setState({
-      appState: AppState.ITEM_LINKED,
+      appState: AppState.PUBLIC_TOKEN_EXCHANGE_PENDING,
       account_name,
       mask,
+    });
+
+    await axios({
+      url: '/exchange_token',
+      method: 'post',
+      data: {
+        public_token,
+        metadata,
+      }
+    });
+
+    this.setState({
+      appState: AppState.PUBLIC_TOKEN_EXCHANGED,
     });
 
     // Start polling for transactions. We do this because the server is currently
@@ -113,7 +134,11 @@ class Home extends Component {
       case AppState.ITEM_NOT_LINKED:
         return (
           <div>
-            <Link initializeBankAccount={this.initializeBankAccount} />
+            <Link
+              initializeBankAccount={this.initializeBankAccount}
+              webhook={this.state.webhook}
+              public_key={this.state.public_key}
+            />
           </div>
         );
       case AppState.ITEM_LINKED:

@@ -21,6 +21,12 @@ const port = process.env.PORT || 8000;
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client/dist'));
 
+const PLAID_ENV = process.env.PLAID_ENV || 'sandbox';
+const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
+const PLAID_SECRET = process.env.PLAID_SECRET;
+const PLAID_PUBLIC_KEY = process.env.PLAID_PUBLIC_KEY;
+const TRANSACTION_WEBHOOK_URL = process.env.TRANSACTION_WEBHOOK_URL
+
 /**
  * Initializes a new Plaid Client using your public_key,
  * client_id, and secret_key. These are all found on your
@@ -28,10 +34,7 @@ app.use(express.static(__dirname + '/../client/dist'));
  * @returns initialized plaid client
  */
 const initPlaidClient = () => {
-  const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
-  const PLAID_SECRET = process.env.PLAID_SECRET;
-  const PLAID_PUBLIC_KEY = process.env.PLAID_PUBLIC_KEY;
-  const PLAID_ENV = process.env.PLAID_ENV || 'sandbox';
+
 
   const plaidClient = new plaid.Client(
     PLAID_CLIENT_ID,
@@ -53,6 +56,8 @@ app.post('/get_item_linked_state', async (req, res) => {
   const item = await is_item_linked();
   res.send({
     item,
+    webhook: TRANSACTION_WEBHOOK_URL,
+    public_key: PLAID_PUBLIC_KEY,
   })
 });
 

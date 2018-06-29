@@ -21,18 +21,7 @@ class Link extends Component {
   async handleOnSuccess(public_token, metadata) {
     console.log("link onSuccess", metadata);
 
-    await axios({
-      url: '/exchange_token',
-      method: 'post',
-      data: {
-        public_token,
-        metadata,
-      }
-    });
-    const account_name = metadata.account.name;
-    const mask = metadata.account.mask;
-
-    this.initializeBankAccount(account_name, mask);
+    this.initializeBankAccount(public_token, metadata);
   }
 
   async handleOnEvent(eventName, metadata) {
@@ -54,10 +43,10 @@ class Link extends Component {
         clientName="Boilerplate"
         env="sandbox"
         institution={null}
-        publicKey="2ca704caf9cd7b6d54fd1b1d6dfcd2"
+        publicKey={this.props.public_key}
         product={['transactions', 'auth']}
         apiVersion='v2'
-        webhook="http://532a652f.ngrok.io/webhook"
+        webhook={this.props.webhook}
         onEvent={this.handleOnEvent}
         onExit={this.handleOnExit}
         onLoad={this.handleOnLoad}
