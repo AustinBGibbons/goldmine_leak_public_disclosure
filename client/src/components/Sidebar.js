@@ -59,6 +59,7 @@ TRANSACTION_WEBHOOK_URL=<your webhook url>`
             <h3>Step 2</h3>
             <p>Item Linked! Calling app server to exchange public_token for access_token...</p>
             <p className="big-emoji">☁️</p>
+            <a className="button button-primary" onClick={this.handleReset.bind(this)}>Start Over</a>
           </div>
         );
       case AppState.PUBLIC_TOKEN_EXCHANGED:
@@ -67,6 +68,7 @@ TRANSACTION_WEBHOOK_URL=<your webhook url>`
             <h3>Step 3</h3>
             <p>Server has access_token! App server is waiting for transactions from Plaid...</p>
             <p className="big-emoji">⏳</p>
+            <a className="button button-primary" onClick={this.handleReset.bind(this)}>Start Over</a>
           </div>
         );
       case AppState.TRANSACTIONS_RECEIVED:
@@ -79,12 +81,14 @@ TRANSACTION_WEBHOOK_URL=<your webhook url>`
             <p className="big-emoji">🕵️‍</p>
             <p>Now, let's try authenticating an account using Plaid's Auth product.</p>
             <a className="button button-primary" onClick={this.handleGetAuth.bind(this)}>Authenticate Account</a>
+            <br/>
+            <a className="button button-primary" onClick={this.handleReset.bind(this)}>Start Over</a>
           </div>
         );
       case AppState.AUTH_ERROR:
         return (
           <div>
-            <h3>Step 4</h3>
+            <h3>Step 5</h3>
             <p>Account Not Supported for Auth!</p>
             <p className="big-emoji">😱</p>
             <p>
@@ -96,12 +100,13 @@ TRANSACTION_WEBHOOK_URL=<your webhook url>`
               Financial Institutions show up when you initialize Link with "Auth"
               instead of "Transactions".
             </p>
+            <a className="button button-primary" onClick={this.handleReset.bind(this)}>Start Over</a>
           </div>
         );
       case AppState.AUTH_COMPLETED:
         return (
           <div>
-            <h3>Step 5</h3>
+            <h3>Finished</h3>
             <p>Account Authenticated!</p>
             <p>You've completed all the steps for a basic Plaid app, congrats!</p>
             <p className="big-emoji">🎉</p>
